@@ -55,13 +55,13 @@ class TestRunner {
     void runRegularBuildTests(){
         String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
+        excludedTags.add("rest_api")
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
             Map<String, Closure> builders = [:]
             List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
             for (def pyver in pyVers) {
                 String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
-
                 builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, false, pyver, excludedTags)
             }
             script.parallel(builders)
@@ -82,6 +82,7 @@ class TestRunner {
     void runReleaseTests(){
         String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
+        excludedTags.add("rest_api")
         Map<String, Closure> builders = [:]
         for(revisionsEnabled in [true, false]) {
             for (slaveLabel in ["Linux", "Macos", "Windows"]) {
@@ -145,7 +146,7 @@ class TestRunner {
                         try {
 
                             script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
-                                script.bat(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} \"${workdir}\" -e rest_api ${numcores} --flavor ${flavor} ${eTags}")
+                                script.bat(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
                         finally {
@@ -155,12 +156,17 @@ class TestRunner {
                     } else if (slaveLabel == "Macos") {
                         try {
                             script.withEnv(['PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin']) {
-                                script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} ${workdir} -e rest_api ${numcores} --flavor ${flavor} ${eTags}")
+                                script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
                         finally {
                             script.sh(script: "rm -rf ${workdir}")
                             script.sh(script: "rm -rf ${sourcedir}")
+                        }
+                    }
+                    else if (slaveLabel == "Linux"){
+                        script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
+                            script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} --flavor ${flavor} ${eTags}")
                         }
                     }
                 }
