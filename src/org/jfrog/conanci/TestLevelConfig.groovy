@@ -31,16 +31,25 @@ class TestLevelConfig {
                     script.docker.image('conanio/conantests').inside("-e GH_TOKEN=${script.GH_TOKEN}"){
                         script.sh(script: "python .ci/jenkins/pr_tags.py out.json ${script.env.BRANCH_NAME}")
                         List<String> info = script.readJSON file: 'out.json'
-                        excludedTags.addAll(info["tags"])
-                        revisions = info["revisions"]
+
+                        excludedTags.addAll(jsonToStringList(info["tags"]))
+                        revisions = jsonToStringList(info["revisions"])
 
                         for (sl in ["Windows", "Macos", "Linux"]) {
-                            pyVers[sl].addAll(info["pyvers"][sl])
+                            pyVers[sl].addAll(jsonToStringList(info["pyvers"][sl]))
                         }
                     }
                 }
             }
         }
+    }
+
+    private List<String> jsonToStringList(object){
+        List<String> ret = []
+        for(o in object){
+            ret.add(o.toString())
+        }
+        return ret
     }
 
     List<String> getEffectivePyvers(String nodeLabel){
