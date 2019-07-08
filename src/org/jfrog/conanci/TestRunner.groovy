@@ -17,6 +17,7 @@ class TestRunner {
 
 
     void run(){
+        cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
         runRESTTests()
         script.echo("Branch: ${script.env.BRANCH_NAME}")
@@ -25,6 +26,13 @@ class TestRunner {
         }
         else{
             runRegularBuildTests()
+        }
+    }
+
+
+    void cancelPreviousCommits(){
+        script.stage("Cancelling previous") {
+            BuildCanceller.cancelPrevious(script)
         }
     }
 
