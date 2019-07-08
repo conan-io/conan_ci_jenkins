@@ -30,7 +30,7 @@ class TestLevelConfig {
                     script.sh("docker pull conanio/conantests")
                     script.docker.image('conanio/conantests').inside("-e GH_TOKEN=${script.GH_TOKEN}"){
                         script.sh(script: "python .ci/jenkins/pr_tags.py out.json ${script.env.BRANCH_NAME}")
-                        List<String> info = script.readJSON file: 'out.json'
+                        def info = script.readJSON file: 'out.json'
 
                         excludedTags.addAll(jsonToStringList(info["tags"]))
                         revisions = jsonToStringList(info["revisions"])
