@@ -36,6 +36,7 @@ class TestLevelConfig {
                         revisions = jsonToStringList(info["revisions"])
 
                         for (sl in ["Windows", "Macos", "Linux"]) {
+                            pyVers[sl] = []
                             pyVers[sl].addAll(jsonToStringList(info["pyvers"][sl]))
                         }
                     }
