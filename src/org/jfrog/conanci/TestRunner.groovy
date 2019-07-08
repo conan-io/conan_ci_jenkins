@@ -19,7 +19,7 @@ class TestRunner {
 
     void run(){
         testLevelConfig.init()
-        runRestTests()
+        runRESTTests()
 
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
@@ -41,17 +41,19 @@ class TestRunner {
         return revisionsEnabled ? "enabled_revisions" : "disabled_revisions"
     }
 
-    void runRestTests(){
+    void runRESTTests(){
+        String testModule = "\"conans.test.functional.remote.rest_api_test\""
         Map<String, Closure> restBuilders = [:]
         for (slaveLabel in ["Windows", "Linux"]) {
             String stageLabel = "${slaveLabel} Rest API Test"
-            restBuilders[stageLabel] = runTestSuite(slaveLabel, stageLabel, false, "py36", [])
+            restBuilders[stageLabel] = runTests(testModule, slaveLabel, stageLabel, false, "py36", [])
         }
         script.parallel(restBuilders)
     }
 
 
     void runRegularBuildTests(){
+        String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
@@ -59,7 +61,8 @@ class TestRunner {
             List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
             for (def pyver in pyVers) {
                 String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
-                builders[stageLabel] = runTestSuite("Linux", stageLabel, false, pyver, excludedTags)
+
+                builders[stageLabel] = runTests(testModule, "Linux", stageLabel, false, pyver, excludedTags)
             }
             script.parallel(builders)
 
@@ -69,7 +72,7 @@ class TestRunner {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
-                    builders[stageLabel] = runTestSuite(slaveLabel, stageLabel, false, pyver, excludedTags)
+                    builders[stageLabel] = runTests(testModule, slaveLabel, stageLabel, false, pyver, excludedTags)
                 }
             }
             script.parallel(builders)
@@ -77,6 +80,7 @@ class TestRunner {
     }
 
     void runReleaseTests(){
+        String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         Map<String, Closure> builders = [:]
         for(revisionsEnabled in [true, false]) {
@@ -84,15 +88,15 @@ class TestRunner {
                 def pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
-                    builders[stageLabel] = runTestSuite(slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
+                    builders[stageLabel] = runTests(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
                 }
             }
         }
         script.parallel(builders)
     }
 
-    private Closure runTestSuite(String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags){
-        String eTags
+    private Closure runTests(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags){
+        String eTags = ""
         if(excludedTags){
             eTags = "-e " + excludedTags.join(' -e ')
         }
@@ -135,7 +139,6 @@ class TestRunner {
                     }
                 }
 
-                String testModule = "\"conans.test\""
                 String numcores = "--num_cores=${numCores}"
 
                 if(slaveLabel == "Windows"){

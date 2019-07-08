@@ -32,12 +32,12 @@ class TestLevelConfig {
                         script.sh(script: "python .ci/jenkins/pr_tags.py out.json ${script.env.BRANCH_NAME}")
                         def info = script.readJSON file: 'out.json'
 
-                        excludedTags.addAll(jsonToStringList(info["tags"]))
-                        revisions = jsonToStringList(info["revisions"])
+                        excludedTags.addAll(info["tags"])
+                        revisions = info["revisions"]
 
                         for (sl in ["Windows", "Macos", "Linux"]) {
                             pyVers[sl] = []
-                            pyVers[sl].addAll(jsonToStringList(info["pyvers"][sl]))
+                            pyVers[sl].addAll(info["pyvers"][sl])
                         }
                     }
                 }
@@ -45,13 +45,6 @@ class TestLevelConfig {
         }
     }
 
-    private List<String> jsonToStringList(object){
-        List<String> ret = []
-        for(o in object){
-            ret.add(o.toString())
-        }
-        return ret
-    }
 
     List<String> getEffectivePyvers(String nodeLabel){
 
