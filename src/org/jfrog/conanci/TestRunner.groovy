@@ -46,7 +46,7 @@ class TestRunner {
         Map<String, Closure> restBuilders = [:]
         for (slaveLabel in ["Windows", "Linux"]) {
             String stageLabel = "${slaveLabel} Rest API Test"
-            restBuilders[stageLabel] = runTests(testModule, slaveLabel, stageLabel, false, "py36", [])
+            restBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, "py36", [])
         }
         script.parallel(restBuilders)
     }
@@ -62,7 +62,7 @@ class TestRunner {
             for (def pyver in pyVers) {
                 String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
 
-                builders[stageLabel] = runTests(testModule, "Linux", stageLabel, false, pyver, excludedTags)
+                builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, false, pyver, excludedTags)
             }
             script.parallel(builders)
 
@@ -72,7 +72,7 @@ class TestRunner {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
-                    builders[stageLabel] = runTests(testModule, slaveLabel, stageLabel, false, pyver, excludedTags)
+                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags)
                 }
             }
             script.parallel(builders)
@@ -88,80 +88,80 @@ class TestRunner {
                 def pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
-                    builders[stageLabel] = runTests(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
+                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
                 }
             }
         }
         script.parallel(builders)
     }
 
-    private Closure runTests(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags){
+    private Closure getTestClosure(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags){
         String eTags = ""
         if(excludedTags){
             eTags = "-e " + excludedTags.join(' -e ')
         }
         String flavor = getFlavor(revisionsEnabled)
 
-        def ret = script.node(slaveLabel) {
-            script.stage(stageLabel){
-                def workdir
-                def sourcedir
-                def base_source
-                script.lock('source_code') { // Prepare a clean new directory with the sources
-                    try{
-                        script.step([$class: 'WsCleanup'])
-                    }
-                    catch(ignore){
-                        script.echo "Cannot clean WS"
-                    }
-
-                    Map<String, String> vars = script.checkout(script.scm)
-                    def commit = vars["GIT_COMMIT"].substring(0, 4)
-                    script.echo "Starting ${script.env.JOB_NAME} with branch ${script.env.BRANCH_NAME}"
-                    String base_dir = (slaveLabel == "Windows") ? winTmpBase : restTmpBase
-
-                    workdir = "${base_dir}${commit}/${pyver}/${flavor}"
-                    base_source = "${base_dir}source/${commit}"
-                    sourcedir = "${base_source}/${pyver}/${flavor}"
-                    while(script.fileExists(sourcedir)){
-                        sourcedir = sourcedir + "_"
-                    }
-
-                    script.dir(base_source){ // Trick to create the parent
-                        def escaped_ws = "${script.WORKSPACE}".toString().replace("\\", "/")
-                        String cmd = "python -c \"import shutil; shutil.copytree('${escaped_ws}', '${sourcedir}')\"".toString()
-                        if (slaveLabel == "Windows"){
-                            script.bat(script: cmd)
+        def ret = {
+            script.node(slaveLabel) {
+                script.stage(stageLabel) {
+                    def workdir
+                    def sourcedir
+                    def base_source
+                    script.lock('source_code') { // Prepare a clean new directory with the sources
+                        try {
+                            script.step([$class: 'WsCleanup'])
                         }
-                        else{
-                            script.sh(script: cmd)
+                        catch (ignore) {
+                            script.echo "Cannot clean WS"
                         }
-                    }
-                }
 
-                String numcores = "--num_cores=${numCores}"
+                        Map<String, String> vars = script.checkout(script.scm)
+                        def commit = vars["GIT_COMMIT"].substring(0, 4)
+                        script.echo "Starting ${script.env.JOB_NAME} with branch ${script.env.BRANCH_NAME}"
+                        String base_dir = (slaveLabel == "Windows") ? winTmpBase : restTmpBase
 
-                if(slaveLabel == "Windows"){
-                    try{
+                        workdir = "${base_dir}${commit}/${pyver}/${flavor}"
+                        base_source = "${base_dir}source/${commit}"
+                        sourcedir = "${base_source}/${pyver}/${flavor}"
+                        while (script.fileExists(sourcedir)) {
+                            sourcedir = sourcedir + "_"
+                        }
 
-                        script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]){
-                            script.bat(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} \"${workdir}\" -e rest_api ${numcores} --flavor ${flavor} ${eTags}")
+                        script.dir(base_source) { // Trick to create the parent
+                            def escaped_ws = "${script.WORKSPACE}".toString().replace("\\", "/")
+                            String cmd = "python -c \"import shutil; shutil.copytree('${escaped_ws}', '${sourcedir}')\"".toString()
+                            if (slaveLabel == "Windows") {
+                                script.bat(script: cmd)
+                            } else {
+                                script.sh(script: cmd)
+                            }
                         }
                     }
-                    finally{
-                        script.bat(script: "rd /s /q \"${workdir}\"")
-                        script.bat(script: "rd /s /q \"${sourcedir}\"")
-                    }
-                }
-                else if(slaveLabel == "Macos"){
-                    try{
-                        script.withEnv(['PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin']) {
-                            script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} ${workdir} -e rest_api ${numcores} --flavor ${flavor} ${eTags}")
+
+                    String numcores = "--num_cores=${numCores}"
+
+                    if (slaveLabel == "Windows") {
+                        try {
+
+                            script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
+                                script.bat(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} \"${workdir}\" -e rest_api ${numcores} --flavor ${flavor} ${eTags}")
+                            }
                         }
-                    }
-                    finally{
-                        script.sh(script: "rm -rf ${workdir}")
-                        script.sh(script: "rm -rf ${sourcedir}")
+                        finally {
+                            script.bat(script: "rd /s /q \"${workdir}\"")
+                            script.bat(script: "rd /s /q \"${sourcedir}\"")
+                        }
+                    } else if (slaveLabel == "Macos") {
+                        try {
+                            script.withEnv(['PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin']) {
+                                script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} ${workdir} -e rest_api ${numcores} --flavor ${flavor} ${eTags}")
+                            }
+                        }
+                        finally {
+                            script.sh(script: "rm -rf ${workdir}")
+                            script.sh(script: "rm -rf ${sourcedir}")
+                        }
                     }
                 }
             }
