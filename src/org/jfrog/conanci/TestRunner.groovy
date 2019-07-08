@@ -8,7 +8,6 @@ class TestRunner {
     private static final String runnerPath = ".ci/jenkins/runner.py"
     private static final String numCores = "3"
     private script;
-    private static boolean isPR = false
     private TestLevelConfig testLevelConfig
 
     TestRunner(script){
@@ -21,7 +20,7 @@ class TestRunner {
         testLevelConfig.init()
         runRESTTests()
 
-        if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
+        if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME == "feature/tests_library" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
         }
         else{
