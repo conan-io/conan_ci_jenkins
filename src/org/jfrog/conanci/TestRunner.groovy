@@ -17,13 +17,13 @@ class TestRunner {
 
 
     void run(){
+        testLevelConfig.init() // This will read the tags from the PR if this is a PR
         runRESTTests()
         script.echo("Branch: ${script.env.BRANCH_NAME}")
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME == "PR-5458" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
         }
         else{
-            testLevelConfig.init() // This will read the tags from the PR if this is a PR
             runRegularBuildTests()
         }
     }
