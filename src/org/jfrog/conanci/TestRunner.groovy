@@ -13,12 +13,12 @@ class TestRunner {
 
     TestRunner(script){
         testLevelConfig = new TestLevelConfig(script)
-        testLevelConfig.init()
         this.script = script
     }
 
 
     void run(){
+        testLevelConfig.init()
         runRestTests()
 
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
