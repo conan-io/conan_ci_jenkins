@@ -14,6 +14,9 @@ class TestLevelConfig {
         this.pyVers = [:]
         this.revisions = false
 
+    }
+
+    def init(){
         if (script.env.BRANCH_NAME =~ /(^PR-.*)/) {
             readPRTags()
         }

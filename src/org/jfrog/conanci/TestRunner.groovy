@@ -13,6 +13,7 @@ class TestRunner {
 
     TestRunner(script){
         testLevelConfig = new TestLevelConfig(script)
+        testLevelConfig.init()
         this.script = script
     }
 
