@@ -17,13 +17,13 @@ class TestRunner {
 
 
     void run(){
-        testLevelConfig.init()
         runRESTTests()
-
+        script.echo("Branch: ${script.env.BRANCH_NAME}")
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME == "feature/tests_library" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
         }
         else{
+            testLevelConfig.init()
             runRegularBuildTests()
         }
     }
