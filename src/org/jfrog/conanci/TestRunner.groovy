@@ -69,7 +69,7 @@ class TestRunner {
             List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
             for (def pyver in pyVers) {
                 String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
-                builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, false, pyver, excludedTags)
+                builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags)
             }
             script.parallel(builders)
 
@@ -79,7 +79,7 @@ class TestRunner {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
-                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags)
+                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
                 }
             }
             script.parallel(builders)
