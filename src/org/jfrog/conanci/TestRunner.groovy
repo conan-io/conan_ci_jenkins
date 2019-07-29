@@ -172,8 +172,13 @@ class TestRunner {
                         }
                     }
                     else if (slaveLabel == "Linux"){
-                        script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
-                            script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} --flavor ${flavor} ${eTags}")
+                        try {
+                            script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
+                                script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} --flavor ${flavor} ${eTags}")
+                            }
+                        }
+                        finally {
+                            script.sh(script: "rm -rf ${sourcedir}")
                         }
                     }
                 }
