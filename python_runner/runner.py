@@ -25,12 +25,11 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     if excluded_tags:
         for tag in excluded_tags:
             tags_str.append("not {}".format(tag))
+            tags_str = '-A "%s"' % " and ".join(tags_str)
     if include_tags:
         for tag in include_tags:
             tags_str.append("{}".format(tag))
-
-    if tags_str:
-        tags_str = '-A "%s"' % " and ".join(tags_str)
+            tags_str = '-A "%s"' % " or ".join(tags_str)
 
     pyenv = pylocations[pyver]
     source_cmd = "." if platform.system() != "Windows" else ""
@@ -118,6 +117,9 @@ if __name__ == "__main__":
                         help='Tags to exclude from testing, e.g.: rest_api')
     parser.add_argument('--flavor', '-f', help='enabled_revisions, disabled_revisions')
     args = parser.parse_args()
+
+    if args.include_tags and args.exclude_tags:
+        raise Exception("exclude_tags and include_tags cannot be used at the same time")
 
     run_tests(args.module, args.pyver, args.source_folder, args.tmp_folder, args.flavor,
               args.exclude_tags, args.include_tags, num_cores=args.num_cores)
