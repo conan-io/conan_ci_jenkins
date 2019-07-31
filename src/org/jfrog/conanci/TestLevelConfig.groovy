@@ -30,7 +30,7 @@ class TestLevelConfig {
                     script.sh("docker pull conanio/conantests")
                     script.docker.image('conanio/conantests').inside("-e GH_TOKEN=${script.GH_TOKEN}"){
                         script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins', returnStdout: false)
-                        script.sh(script: "python conan_ci_jenkins/pr_tags.py out.json ${script.env.BRANCH_NAME}")
+                        script.sh(script: "python conan_ci_jenkins/python_runner/pr_tags.py out.json ${script.env.BRANCH_NAME}")
                         def info = script.readJSON file: 'out.json'
 
                         excludedTags.addAll(info["tags"])
