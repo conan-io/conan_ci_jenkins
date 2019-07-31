@@ -109,8 +109,8 @@ class TestRunner {
     }
 
 
-    private Closure getTestClosure(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags,
-                                   ,List<String> includedTags){
+    private Closure getTestClosure(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver,
+                                   List<String> excludedTags, List<String> includedTags){
         String eTags = ""
         if(excludedTags){
             eTags = "-e " + excludedTags.join(' -e ')
