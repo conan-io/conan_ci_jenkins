@@ -54,7 +54,7 @@ class TestRunner {
         for (slaveLabel in ["Windows", "Linux"]) {
             List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
             for (def pyver in pyVers) {
-                String stageLabel = "${slaveLabel} Rest API Test - ${pyver}"
+                String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
                 restBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
             }
         }
