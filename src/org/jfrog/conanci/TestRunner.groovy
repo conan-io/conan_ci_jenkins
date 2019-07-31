@@ -164,7 +164,7 @@ class TestRunner {
                         try {
 
                             script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
-                                script.bat(script: "rd /s /q conan_ci_jenkins")
+                                script.bat(script: "rd /s /q conan_ci_jenkins", returnStatus: true)
                                 script.bat(script: 'git clone https://github.com/conan-io/conan_ci_jenkins')
                                 script.bat(script: "python conan_ci_jenkins/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} --flavor ${flavor} ${eTags}")
                             }
