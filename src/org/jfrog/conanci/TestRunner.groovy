@@ -135,7 +135,6 @@ class TestRunner {
                         }
 
                         Map<String, String> vars = script.checkout(script.scm)
-                        script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins', returnStdout: false)
 
                         def commit = vars["GIT_COMMIT"].substring(0, 4)
                         script.echo "Starting ${script.env.JOB_NAME} with branch ${script.env.BRANCH_NAME}"
@@ -165,6 +164,8 @@ class TestRunner {
                         try {
 
                             script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
+                                script.bat(script: "rd /s /q conan_ci_jenkins")
+                                script.bat(script: 'git clone https://github.com/conan-io/conan_ci_jenkins')
                                 script.bat(script: "python conan_ci_jenkins/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
@@ -175,6 +176,8 @@ class TestRunner {
                     } else if (slaveLabel == "Macos") {
                         try {
                             script.withEnv(['PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin']) {
+                                script.sh(script: 'rm -rf conan_ci_jenkins')
+                                script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins')
                                 script.sh(script: "python conan_ci_jenkins/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
@@ -186,6 +189,8 @@ class TestRunner {
                     else if (slaveLabel == "Linux"){
                         try {
                             script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
+                                script.sh(script: 'rm -rf conan_ci_jenkins')
+                                script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins')
                                 script.sh(script: "python conan_ci_jenkins/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
