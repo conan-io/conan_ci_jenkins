@@ -90,8 +90,8 @@ class TestRunner {
         String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
-        Map<String, Closure> builders = [:]
         for(revisionsEnabled in [true, false]) {
+            Map<String, Closure> builders = [:]
             for (slaveLabel in ["Linux", "Macos", "Windows"]) {
                 def pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
@@ -99,8 +99,8 @@ class TestRunner {
                     builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
                 }
             }
+            script.parallel(builders)
         }
-        script.parallel(builders)
     }
 
     private Closure getTestClosure(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags){
