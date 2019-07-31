@@ -5,7 +5,6 @@ class TestRunner {
 
     private static final String winTmpBase = "D:/J/t/"
     private static final String restTmpBase = "/tmp/"
-    private static final String runnerPath = ".ci/jenkins/runner.py"
     private static final String numCores = "3"
     private script;
     private TestLevelConfig testLevelConfig
@@ -29,7 +28,6 @@ class TestRunner {
         }
     }
 
-
     void cancelPreviousCommits(){
         script.stage("Cancelling previous") {
             BuildCanceller.cancelPrevious(script)
@@ -49,11 +47,16 @@ class TestRunner {
     }
 
     void runRESTTests(){
-        String testModule = "\"conans.test.functional.remote.rest_api_test\""
+        List<String> excludedTags = []
+        List<String> includedTags = ["rest_api", "local_bottle"]
+        String testModule = "\"conans.test\""
         Map<String, Closure> restBuilders = [:]
         for (slaveLabel in ["Windows", "Linux"]) {
-            String stageLabel = "${slaveLabel} Rest API Test"
-            restBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, "py36", [])
+            List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
+            for (def pyver in pyVers) {
+                String stageLabel = "${slaveLabel} Rest API Test - ${pyver}"
+                restBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
+            }
         }
         script.parallel(restBuilders)
     }
@@ -63,13 +66,14 @@ class TestRunner {
         String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
+        excludedTags.add("local_bottle")
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
             Map<String, Closure> builders = [:]
             List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
             for (def pyver in pyVers) {
                 String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
-                builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags)
+                builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
             }
             script.parallel(builders)
 
@@ -79,7 +83,7 @@ class TestRunner {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
-                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
+                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags, [])
                 }
             }
             script.parallel(builders)
@@ -90,23 +94,29 @@ class TestRunner {
         String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
+        excludedTags.add("local_bottle")
         for(revisionsEnabled in [true, false]) {
             Map<String, Closure> builders = [:]
             for (slaveLabel in ["Linux", "Macos", "Windows"]) {
                 def pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
-                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags)
+                    builders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags, [])
                 }
             }
             script.parallel(builders)
         }
     }
 
-    private Closure getTestClosure(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags){
+
+    private Closure getTestClosure(String testModule, String slaveLabel, String stageLabel, boolean revisionsEnabled, String pyver, List<String> excludedTags,
+                                   ,List<String> includedTags){
         String eTags = ""
         if(excludedTags){
             eTags = "-e " + excludedTags.join(' -e ')
+        }
+        if(includedTags){
+            eTags += " -i " + includedTags.join(' -i ')
         }
         String flavor = getFlavor(revisionsEnabled)
 
@@ -125,6 +135,8 @@ class TestRunner {
                         }
 
                         Map<String, String> vars = script.checkout(script.scm)
+                        script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins', returnStdout: false)
+
                         def commit = vars["GIT_COMMIT"].substring(0, 4)
                         script.echo "Starting ${script.env.JOB_NAME} with branch ${script.env.BRANCH_NAME}"
                         String base_dir = (slaveLabel == "Windows") ? winTmpBase : restTmpBase
@@ -153,7 +165,7 @@ class TestRunner {
                         try {
 
                             script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
-                                script.bat(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} --flavor ${flavor} ${eTags}")
+                                script.bat(script: "python conan_ci_jenkins/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
                         finally {
@@ -163,7 +175,7 @@ class TestRunner {
                     } else if (slaveLabel == "Macos") {
                         try {
                             script.withEnv(['PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin']) {
-                                script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} --flavor ${flavor} ${eTags}")
+                                script.sh(script: "python conan_ci_jenkins/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
                         finally {
@@ -174,7 +186,7 @@ class TestRunner {
                     else if (slaveLabel == "Linux"){
                         try {
                             script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
-                                script.sh(script: "python ${runnerPath} ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} --flavor ${flavor} ${eTags}")
+                                script.sh(script: "python conan_ci_jenkins/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} --flavor ${flavor} ${eTags}")
                             }
                         }
                         finally {
