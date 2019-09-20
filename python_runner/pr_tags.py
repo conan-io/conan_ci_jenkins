@@ -34,9 +34,9 @@ if __name__ == "__main__":
     parser.add_argument('branch_name', help='e.g.: PR-23')
     args = parser.parse_args()
 
-    TAG_PYVERS = "@PYVERS:"
-    TAG_TAGS = "@TAGS:"
-    TAG_REVISIONS = "@REVISIONS:"
+    TAG_PYVERS = "#PYVERS:"
+    TAG_TAGS = "#TAGS:"
+    TAG_REVISIONS = "#REVISIONS:"
 
     out_file = args.output_file
     branch = args.branch_name
