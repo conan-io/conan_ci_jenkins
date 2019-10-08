@@ -16,9 +16,14 @@ class TestLevelConfig {
 
     }
 
+    String toString(){
+        return "- Forced tags: ${this.excludedTags}\n- Forced pyVers: ${this.pyVers}\n- Forced revisions: ${this.revisions}"
+    }
+
     def init(){
         if (script.env.BRANCH_NAME =~ /(^PR-.*)/) {
             readPRTags()
+            script.echo(this.toString())
         }
     }
 
