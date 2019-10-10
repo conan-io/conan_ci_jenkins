@@ -88,6 +88,24 @@ class TestRunner {
             }
             script.parallel(builders)
         }
+        if(testLevelConfig.shouldPublishTestPypi()){
+            publishTestPypi()
+        }
+    }
+
+    void publishTestPypi(){
+        // Deploy snapshot to test pypi if branch develop
+        script.node("Linux") {
+            script.stage("Deploy snapshot to pypitesting"){
+                script.checkout script.scm
+                script.withCredentials([script.string(credentialsId: 'TWINE_USERNAME', variable: 'TWINE_USERNAME'),
+                                        script.string(credentialsId: 'TWINE_PASSWORD', variable: 'TWINE_PASSWORD')]) {
+                    script.sh(script: "python .ci/bump_dev_version.py")
+                    script.sh(script: "rm -rf dist/ && python setup.py sdist")
+                    script.sh(script: "python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*")
+                }
+            }
+        }
     }
 
     void runReleaseTests(){

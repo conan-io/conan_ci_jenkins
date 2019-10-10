@@ -13,7 +13,10 @@ class TestLevelConfig {
         this.excludedTags = []
         this.pyVers = [:]
         this.revisions = false
+    }
 
+    boolean shouldPublishTestPypi(){
+        return script.env.BRANCH_NAME == "develop"
     }
 
     String toString(){
