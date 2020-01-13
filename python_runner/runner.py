@@ -78,7 +78,8 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     env["CONAN_LOGGING_LEVEL"] = "50" if platform.system() == "Darwin" else "50"
     env["CHANGE_AUTHOR_DISPLAY_NAME"] = ""
     env["TESTING_REVISIONS_ENABLED"] = "True" if flavor == "enabled_revisions" else "False"
-    env["USE_UNSUPPORTED_CONAN_WITH_PYTHON_2"] = "True" if sys.version_info.major == 2 else "False"
+    if sys.version_info.major == 2:
+        env["USE_UNSUPPORTED_CONAN_WITH_PYTHON_2"] = "True"
     # Related with the error: LINK : fatal error LNK1318: Unexpected PDB error; RPC (23) '(0x000006BA)'
     # More info: http://blog.peter-b.co.uk/2017/02/stop-mspdbsrv-from-breaking-ci-build.html
     # Update, this doesn't solve the issue, other issues arise:
