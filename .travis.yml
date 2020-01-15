@@ -1,11 +1,6 @@
 matrix:
   include:
     - language: python
-      python: 2.7
-      script:
-        - python -m unittest python_runner/tests/runner_test.py
-
-    - language: python
       python: 3.7
       script:
         - python -m unittest python_runner/tests/runner_test.py
