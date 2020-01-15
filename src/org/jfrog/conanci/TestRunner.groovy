@@ -206,6 +206,7 @@ class TestRunner {
                     }
                     else if (slaveLabel == "Linux"){
                         try {
+                            script.sh("docker pull conanio/conantests")
                             script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
                                 script.sh(script: 'rm -rf conan_ci_jenkins')
                                 script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins')
