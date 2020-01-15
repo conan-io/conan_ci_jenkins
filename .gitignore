@@ -4,10 +4,9 @@ gradle
 
 # Ignore Gradle build output directory
 build
-
 .idea
-
 .attach*
-
 out
 
+__pycache__
+*.pyc

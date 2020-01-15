@@ -9,7 +9,15 @@ import spock.lang.Specification
 class SomeTest extends Specification {
 
     def "I could add some tests here"(){
-        assertTrue(1==1)
+        given:
+            int left = 2
+            int right = 2
+
+        when:
+            int result = left + right
+
+        then:
+            result == 4
     }
 
 }
