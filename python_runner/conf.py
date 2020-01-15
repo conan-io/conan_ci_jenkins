@@ -5,16 +5,21 @@ from contextlib import contextmanager
 
 winpylocation = {"py27": "C:\\Python27\\python.exe",
                  "py34": "C:\\Python34\\python.exe",
-                 "py36": "C:\\Python36\\python.exe"}
+                 "py36": "C:\\Python36\\python.exe",
+                 "py37": "C:\\Python37\\python.exe",
+                 "py38": "C:\\Python38\\python.exe"}
 
 macpylocation = {"py27": "/usr/bin/python",  # /Users/jenkins_ci/.pyenv/versions/2.7.11/bin/python",
                  "py34": "/Users/jenkins_ci/.pyenv/versions/3.4.7/bin/python",
-                 "py36": "/Users/jenkins_ci/.pyenv/versions/3.6.5/bin/python"}
+                 "py36": "/Users/jenkins_ci/.pyenv/versions/3.6.5/bin/python",
+                 "py37": "/Users/jenkins_ci/.pyenv/versions/3.7.6/bin/python",
+                 "py38": "/Users/jenkins_ci/.pyenv/versions/3.8.1/bin/python",}
 
 linuxpylocation = {"py27": "/usr/bin/python2.7",
                    "py34": "/usr/bin/python3.4",
                    "py36": "/usr/bin/python3.6",
-                   "py37": "/usr/bin/python3.7"}
+                   "py37": "/usr/bin/python3.7",
+                   "py38": "/usr/bin/python3.8"}
 
 win_msbuilds_logs_folder = "D:\\J\\msbuild_logs"
 
