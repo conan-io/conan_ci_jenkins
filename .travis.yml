@@ -21,7 +21,7 @@ matrix:
       python: 3.8
       before_install:
         - |
-          count=`git diff --name-only | sort -u | uniq | grep docker_images | wc -l`
+          count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
           if [ $count -ne 0 ]
           then
             echo "Build docker images"
