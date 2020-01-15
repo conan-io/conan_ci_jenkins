@@ -41,6 +41,7 @@ class TestLevelConfig {
                         script.sh("pwd")
                         script.sh("rm -rf conan_ci_jenkins")
                         script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins')
+                        script.sh(script: "pip install PyGithub")
                         script.sh(script: "python conan_ci_jenkins/python_runner/pr_tags.py out.json ${script.env.BRANCH_NAME}")
                         def info = script.readJSON file: 'out.json'
 
