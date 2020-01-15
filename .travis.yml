@@ -20,7 +20,6 @@ matrix:
     - language: ptyhon
       python: 3.8
       before_install:
-        - git diff --name-only $TRAVIS_COMMIT_RANGE
         - |
           count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
           if [ $count -ne 0 ]
