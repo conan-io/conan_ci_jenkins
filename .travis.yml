@@ -16,3 +16,18 @@ matrix:
       script:
         - ./gradlew test
 
+    # Generate docker images (only if modified)
+    - language: ptyhon
+      python: 3.8
+      before_install:
+        - |
+          count=`git diff --name-only | sort -u | uniq | grep docker_images | wc -l`
+          if [ $count -ne 0 ]
+          then
+            echo "Build docker images"
+          else
+            echo "No docker image to build"
+            travis_terminate 0
+          fi
+      script:
+        - echo "Building docker images"
