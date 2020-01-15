@@ -8,10 +8,8 @@ import spock.lang.Specification
 
 class SomeTest extends Specification {
 
-
-
     def "I could add some tests here"(){
-
+        assertTrue(1==1)
     }
 
 }
