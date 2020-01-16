@@ -51,6 +51,10 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     if platform.system() == "Darwin":
         pip_installs += "pip install -r conans/requirements_osx.txt && "
 
+    traverse_namespace = ""
+    if platform.system() == "Windows" and pyver == "py38":
+        traverse_namespace = "--traverse-namespace"
+
     #  --nocapture
     command = "virtualenv --python \"{pyenv}\" \"{venv_dest}\" && " \
               "{source_cmd} \"{venv_exe}\" && " \
@@ -60,6 +64,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
               "nosetests {module_path} {tags_str} --verbosity={verbosity} " \
               "{multiprocess} " \
               "{debug_traces} " \
+              "{traverse_namespace} " \
               "--with-xunit " \
               "&& codecov -t f1a9c517-3d81-4213-9f51-61513111fc28".format(
                                     **{"module_path": module_path,
@@ -70,6 +75,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
                                        "venv_exe": venv_exe,
                                        "source_cmd": source_cmd,
                                        "debug_traces": debug_traces,
+                                       "traverse_namespace": traverse_namespace,
                                        "multiprocess": multiprocess,
                                        "pip_installs": pip_installs})
 
