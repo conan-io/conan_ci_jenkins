@@ -60,9 +60,9 @@ class TestLevelConfig {
 
     List<String> getEffectivePyvers(String nodeLabel){
 
-        def allPyvers = ["Macos": ['py36', 'py27'],
-                         "Linux": ['py37', 'py36', 'py27'],
-                         "Windows": ['py36', 'py27']]
+        def allPyvers = ["Macos": ['py38', 'py36', 'py27'],
+                         "Linux": ['py38', 'py37', 'py36', 'py27'],
+                         "Windows": ['py38', 'py36', 'py27']]
 
         if (script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             return allPyvers[nodeLabel]
@@ -75,7 +75,7 @@ class TestLevelConfig {
         if (script.env.BRANCH_NAME =~ /(^PR-.*)/) {
 
             def reducedPyvers  = ["Macos": ['py36'],
-                                  "Linux": ['py36', 'py27'],
+                                  "Linux": ['py38', 'py36', 'py27'],
                                   "Windows": ['py36']]
 
             reducedPyvers[nodeLabel].addAll(this.pyVers[nodeLabel])
@@ -88,7 +88,7 @@ class TestLevelConfig {
 
     List<Boolean> getEffectiveRevisionsConfigurations(){
 
-        if (this.revisions || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/ || script.env.JOB_NAME == "ConanNightly") {
+        if (this.revisions || script.env.BRANCH_NAME =~ /(^release.*)|(^master)|(^develop)/ || script.env.JOB_NAME == "ConanNightly") {
             return [true, false]
         }
 
