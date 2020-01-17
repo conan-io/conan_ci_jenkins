@@ -1,6 +1,7 @@
-matrix:
+jobs:
   include:
-    - language: python
+    - stage: Test sources
+      language: python
       python: 3.7
       script:
         - python -m unittest python_runner/tests/runner_test.py
@@ -17,17 +18,19 @@ matrix:
         - ./gradlew test
 
     # Generate docker images (only if modified)
-    - language: ptyhon
-      python: 3.8
-      before_install:
-        - |
-          count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
-          if [ $count -ne 0 ]
-          then
-            echo "Build docker images"
-          else
-            echo "No docker image to build"
-            travis_terminate 0
-          fi
-      script:
-        - echo "Building docker images"
+    - stage: Build docker images
+      env: IMAGE=Base
+    - env: IMAGE=MULTI
+
+before_install:
+  - |
+    count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
+    if [ $count -ne 0 ]
+    then
+      echo "Build docker images"
+    else
+      echo "No docker image to build"
+      travis_terminate 0
+    fi
+script:
+  - echo "Building docker image $IMAGE"
