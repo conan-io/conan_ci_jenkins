@@ -2,6 +2,10 @@ stages:
   - test
   - docker
 
+cache:
+  directories:
+  - docker_images
+  
 jobs:
   include:
     # Run tests for the Python code
@@ -34,8 +38,12 @@ before_install:
       echo "No docker image to build"
       travis_terminate 0
     fi
+before_script:
+  - docker load -i docker_images/images.tar || true
 script:
   - echo "Building docker image $IMAGE"
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/tests-$IMAGE
+after_script:
+  - docker save -o docker_images/images.tar $(docker images -a -q)
