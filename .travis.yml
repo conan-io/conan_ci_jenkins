@@ -19,6 +19,7 @@ jobs:
 
     # Generate docker images (only if modified)
     - stage: Build docker images
+      language: minimal
       env: IMAGE=Base
     - env: IMAGE=MULTI
 
