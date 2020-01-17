@@ -18,9 +18,10 @@ jobs:
         - ./gradlew test
 
     # Generate docker images (only if modified)
-    - stage: docker
-      env: IMAGE=Base
-    - env: IMAGE=Base
+    - stage: docker base
+      env: IMAGE=base
+    - stage: docker with tools
+      env: IMAGE=standard
 
 language: minimal
 before_install:
