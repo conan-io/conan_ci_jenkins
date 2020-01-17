@@ -19,10 +19,10 @@ jobs:
 
     # Generate docker images (only if modified)
     - stage: Build docker images
-      language: minimal
       env: IMAGE=Base
     - env: IMAGE=MULTI
 
+language: minimal
 before_install:
   - |
     count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
