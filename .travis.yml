@@ -1,26 +1,31 @@
+stages:
+  - test_python
+  - test_groovy
+  - docker
+
+language:
+  - python
+  - groovy
+python:
+  - 3.7
+  - 3.8
+
 jobs:
   include:
-    - stage: Test sources
+    - stage: test_python
       language: python
-      python: 3.7
       script:
         - python -m unittest python_runner/tests/runner_test.py
 
-    - language: python
-      python: 3.8
-      script:
-        - python -m unittest python_runner/tests/runner_test.py
-
-    - language: groovy
+    - stage: test_groovy
+      language: groovy
       before_script:
         - ./gradlew assemble
       script:
         - ./gradlew test
 
-# Generate docker images (only if modified)
-jobs:
-  include:
-    - stage: Build docker images
+    # Generate docker images (only if modified)
+    - stage: docker
       env: IMAGE=Base
     - env: IMAGE=MULTI
 
