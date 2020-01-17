@@ -17,7 +17,9 @@ jobs:
       script:
         - ./gradlew test
 
-    # Generate docker images (only if modified)
+# Generate docker images (only if modified)
+jobs:
+  include:
     - stage: Build docker images
       env: IMAGE=Base
     - env: IMAGE=MULTI
