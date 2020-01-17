@@ -34,3 +34,4 @@ before_install:
     fi
 script:
   - echo "Building docker image $IMAGE"
+  - docker build --help
