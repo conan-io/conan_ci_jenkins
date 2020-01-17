@@ -36,6 +36,6 @@ before_install:
     fi
 script:
   - echo "Building docker image $IMAGE"
-  - docker build -t travis-ci-$IMAGE $IMAGE
+  - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/tests-$IMAGE
