@@ -2,9 +2,7 @@ stages:
   - test
   - docker
 
-language:
-  - python
-  - groovy
+language: python
 python:
   - 3.7
   - 3.8
