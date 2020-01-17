@@ -20,7 +20,7 @@ jobs:
     # Generate docker images (only if modified)
     - stage: docker
       env: IMAGE=Base
-    - env: IMAGE=MULTI
+    - env: IMAGE=Base
 
 language: minimal
 before_install:
@@ -35,4 +35,6 @@ before_install:
     fi
 script:
   - echo "Building docker image $IMAGE"
-  - docker build --help
+  - docker build -t travis-ci-$IMAGE $IMAGE
+  - docker images
+  - docker tag travis-ci-$IMAGE conanio/tests-$IMAGE
