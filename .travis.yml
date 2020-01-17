@@ -1,6 +1,5 @@
 stages:
-  - test_python
-  - test_groovy
+  - test
   - docker
 
 language:
@@ -12,13 +11,11 @@ python:
 
 jobs:
   include:
-    - stage: test_python
-      language: python
+    - language: python
       script:
         - python -m unittest python_runner/tests/runner_test.py
 
-    - stage: test_groovy
-      language: groovy
+    - language: groovy
       before_script:
         - ./gradlew assemble
       script:
