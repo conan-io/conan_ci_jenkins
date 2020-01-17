@@ -1,10 +1,6 @@
 stages:
   - test
   - docker
-
-cache:
-  directories:
-  - cache
   
 jobs:
   include:
@@ -38,12 +34,8 @@ before_install:
       echo "No docker image to build"
       travis_terminate 0
     fi
-before_script:
-  - docker load -i cache/images.tar || true
 script:
   - echo "Building docker image $IMAGE"
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/tests-$IMAGE
-before_cache:
-  - docker save -o cache/images.tar $(docker images -a -q)
