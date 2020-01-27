@@ -15,6 +15,10 @@ class TestRunner {
 
 
     void run(){
+        script.stage("This is staging") {
+            script.echo "Yes, it is"
+        }
+
         cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
         runRESTTests()
