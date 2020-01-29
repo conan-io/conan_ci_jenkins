@@ -18,10 +18,12 @@ jobs:
         - ./gradlew test
 
     # Generate docker images (only if modified)
-    - stage: docker base
-      env: IMAGE=base
-    - stage: docker with tools
-      env: IMAGE=standard
+    - stage: conanio/conantests
+      env: IMAGE=conan_tests
+    #- stage: docker base
+    #  env: IMAGE=base
+    #- stage: docker with tools
+    #  env: IMAGE=standard
 
 language: minimal
 before_install:
@@ -38,4 +40,4 @@ script:
   - echo "Building docker image $IMAGE"
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
-  - docker tag travis-ci-$IMAGE conanio/tests-$IMAGE
+  # - docker tag travis-ci-$IMAGE conanio/tests-$IMAGE
