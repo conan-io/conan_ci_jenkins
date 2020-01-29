@@ -22,10 +22,6 @@ jobs:
     # Generate docker images (only if modified)
     - stage: docker conanio/conantests
       env: IMAGE=conan_tests
-    #- stage: docker base
-    #  env: IMAGE=base
-    #- stage: docker with tools
-    #  env: IMAGE=standard
 
 language: minimal
 before_install:
