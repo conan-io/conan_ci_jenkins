@@ -45,7 +45,7 @@ script:
   - docker tag travis-ci-$IMAGE conanio/$IMAGE
 
 after_success:
-  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
-      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
+  - if [[ "$TRAVIS_BRANCH" == "master" and "${TRAVIS_PULL_REQUEST}" = "false" ]]; then
+      echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin;
       docker push conanio/$IMAGE;
     fi
