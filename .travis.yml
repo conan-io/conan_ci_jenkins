@@ -37,7 +37,13 @@ before_install:
       travis_terminate 0
     fi
 script:
-  - echo "Building docker image $IMAGE"
+  - echo "Building docker image 'conanio/$IMAGE'"
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
-  # - docker tag travis-ci-$IMAGE conanio/tests-$IMAGE
+  - docker tag travis-ci-$IMAGE conanio/$IMAGE
+
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
+      docker push conanio/$IMAGE;
+    fi
