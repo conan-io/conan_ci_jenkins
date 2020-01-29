@@ -18,7 +18,7 @@ jobs:
         - ./gradlew test
 
     # Generate docker images (only if modified)
-    - stage: conanio/conantests
+    - stage: docker conanio/conantests
       env: IMAGE=conan_tests
     #- stage: docker base
     #  env: IMAGE=base
