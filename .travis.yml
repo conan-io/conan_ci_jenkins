@@ -9,6 +9,7 @@ jobs:
       python: 3.8
       script:
         - python -m unittest python_runner/tests/runner_test.py
+      after_success:
 
     # Run tests for Groovy
     - language: groovy
@@ -16,6 +17,7 @@ jobs:
         - ./gradlew assemble
       script:
         - ./gradlew test
+      after_success:
 
     # Generate docker images (only if modified)
     - stage: docker conanio/conantests
