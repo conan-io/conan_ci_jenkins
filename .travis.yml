@@ -38,7 +38,8 @@ before_install:
     fi
 script:
   - echo "Building docker image 'conanio/$IMAGE'"
-  - if [[ "$LINTER" != "false"]]; then
+  - if [[ "$LINTER" != "false"]]
+    then
       docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile;
     fi
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
@@ -46,7 +47,8 @@ script:
   - docker tag travis-ci-$IMAGE conanio/$IMAGE
 
 after_success:
-  - if [[ "$TRAVIS_BRANCH" == "master" and "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+  - if [[ "$TRAVIS_BRANCH" == "master" and "${TRAVIS_PULL_REQUEST}" == "false" ]]
+    then
       echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin;
       docker push conanio/$IMAGE;
     fi
