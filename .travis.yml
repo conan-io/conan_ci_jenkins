@@ -36,7 +36,7 @@ before_install:
     fi
 script:
   - echo "Building docker image 'conanio/$IMAGE'"
-  - docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dokerfile
+  - docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/$IMAGE
