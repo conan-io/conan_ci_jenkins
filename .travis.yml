@@ -49,7 +49,7 @@ script:
 
 after_success:
   - |
-    if [[ "$TRAVIS_BRANCH" == "master" and "${TRAVIS_PULL_REQUEST}" == "false" ]]
+    if [[ "$TRAVIS_BRANCH" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]
     then
       echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin;
       docker push conanio/$IMAGE;
