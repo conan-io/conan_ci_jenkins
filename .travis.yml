@@ -38,7 +38,11 @@ before_install:
     fi
 script:
   - echo "Building docker image 'conanio/$IMAGE'"
-  - if [[ "$LINTER" != "false"]]; then docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile; fi
+  - |
+    if [[ "$LINTER" != "false" ]]
+    then
+      docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile; 
+    fi
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/$IMAGE
