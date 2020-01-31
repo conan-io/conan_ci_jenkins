@@ -21,7 +21,9 @@ jobs:
 
     # Generate docker images (only if modified)
     - stage: docker conanio/conantests
-      env: IMAGE=conan_tests
+      env: 
+        - IMAGE=conan_tests
+        - LINTER=false
 
 language: minimal
 before_install:
@@ -36,13 +38,13 @@ before_install:
     fi
 script:
   - echo "Building docker image 'conanio/$IMAGE'"
-  - docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile
+  - if [[ "$LINTER" != "false"]] docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/$IMAGE
 
 after_success:
-  - if [[ "$TRAVIS_BRANCH" == "master" and "${TRAVIS_PULL_REQUEST}" = "false" ]]; then
+  - if [[ "$TRAVIS_BRANCH" == "master" and "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
       echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin;
       docker push conanio/$IMAGE;
     fi
