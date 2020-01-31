@@ -25,11 +25,11 @@ RUN sudo apt-get update \
     pkg-config \
     && sudo rm -rf /var/lib/apt/lists/* \
     && sudo pip install --upgrade pip \
-    && cd /tmp && wget https://bootstrap.pypa.io/get-pip.py \
-    && sudo python3 get-pip.py \
-    && sudo pip install virtualenv \
-    && pip3 install PyGithub \
-    && pip3 install meson
+    && wget -P tmp/ https://bootstrap.pypa.io/get-pip.py \
+    && sudo python3 tmp/get-pip.py \
+    && sudo pip install virtualenv==16.7.9 \
+    && pip3 install PyGithub==1.45 \
+    && pip3 install meson==0.53.1
 
 USER conan
 WORKDIR /home/conan
