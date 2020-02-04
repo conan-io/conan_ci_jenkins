@@ -1,0 +1,48 @@
+# Once we have a commit we want to tag
+
+digraph G {
+    rankdir=LR;
+
+    subgraph cluster_major {
+        label = "Major release 1.x.0";
+
+        Start_major [shape=diamond, label="Start"];
+        End_major [shape=diamond, label="End"];
+
+        validate [label="Basic checks:\n· validate version\n· check green CI"];
+        validate_branch [label="Topology checks:\n· is master branch"];
+        validate_milestone [label="Check milestone:\n· assigned PRs\n· changelogs\n· docs"];
+        create_tag [label="create\nbranch and tag"];
+
+        input_artifacts [style=invisible,fixedsize=true,width=0,height=0];
+        output_artifacts [style=invisible,fixedsize=true,width=0,height=0];
+        subgraph cluster_artifacts {
+            label = "Generate artifacts";
+            deb -> test_deb;
+            win_pyinstaller -> test_win_pyinstaller;
+            pypi -> test_pypi;
+        }
+
+        Start_major -> validate;
+        validate -> validate_branch -> validate_milestone;
+        validate_milestone -> input_artifacts [arrowhead=none];
+        input_artifacts -> deb;
+        input_artifacts -> win_pyinstaller;
+        input_artifacts -> pypi;
+        test_deb -> output_artifacts [arrowhead=none];
+        test_win_pyinstaller -> output_artifacts [arrowhead=none];
+        test_pypi -> output_artifacts [arrowhead=none];
+        output_artifacts -> create_tag;
+        create_tag -> deploy;
+        deploy -> End_major;
+    }
+
+    subgraph cluster_minor {
+        label = "Minor release: 1.21.x";
+        Start_minor [shape=diamond, label="Start"];
+        End_minor [shape=diamond, label="End"];
+
+        Start_minor-> A -> B -> End_minor;
+    }
+    
+}
