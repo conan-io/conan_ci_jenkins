@@ -16,9 +16,21 @@ class CIUnittestsTestCase(unittest.TestCase):
                           ["PY35", "3.5"], 
                           ["PY37", "3.7"], 
                           ["PY38", "3.8"], )
-    def test_environment_variables(self, env_var, version):
+    def test_python_envvars(self, env_var, version):
         python_bin = os.environ[env_var]
         out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
         m = self.re_py_version.match(out)
         v = parse(m.group(1))
         self.assertGreaterEqual(v, parse(version))
+
+    def test_cmake_not_available(self):
+        with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'cmake'"):
+            subprocess.Popen(['cmake',]).communicate()
+
+    def test_git_not_available(self):
+        with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'git'"):
+            subprocess.Popen(['git',]).communicate()
+
+    def test_gcc_not_available(self):
+        with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'gcc'"):
+            subprocess.Popen(['gcc',]).communicate()
