@@ -12,16 +12,17 @@ class CIUnittestsTestCase(unittest.TestCase):
 
     re_py_version = re.compile(r'^Python (\d+\.\d+\.\d+)')
 
-    @parameterized.expand(["PY27", "2.7"], 
-                          ["PY35", "3.5"], 
-                          ["PY37", "3.7"], 
-                          ["PY38", "3.8"], )
+    @parameterized.expand(["PY27", (2, 7)],
+                          ["PY35", (3, 5)],
+                          ["PY37", (3, 7)],
+                          ["PY38", (3, 8)], )
     def test_python_envvars(self, env_var, version):
         python_bin = os.environ[env_var]
         out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
         m = self.re_py_version.match(out)
         v = parse(m.group(1))
-        self.assertGreaterEqual(v, parse(version))
+        self.assertEqual(v.release[0], version[0])
+        self.assertEqual(v.release[1], version[1])
 
     def test_cmake_not_available(self):
         with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'cmake'"):
