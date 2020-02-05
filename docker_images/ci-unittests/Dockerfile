@@ -37,9 +37,6 @@ RUN apt-get -qq update \
     && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc \
     && . ~/.bashrc \
     && pyenv update \
-    && pyenv install 3.8.1 \
-    && pyenv install 3.7.6 \
-    && pyenv install 3.6.10 \
-    && pyenv install 2.7.17
+    && pyenv install 3.8.1
 
-ENTRYPOINT /bin/bash && source /root/environment.sh
+#ENTRYPOINT ["/bin/bash"]
