@@ -30,7 +30,14 @@ jobs:
       env: 
         - IMAGE=conantests
         - LINTER=false
-
+    - name: conanio/ci-unittests
+      env: 
+        - IMAGE=ci-unittests
+    - name: conanio/ci-functional
+      env: 
+       - IMAGE=ci-functional
+    
+      
 language: minimal
 before_install:
   - |
