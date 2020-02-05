@@ -14,27 +14,10 @@ ENV PY38 /root/.pyenv/versions/3.8.1/bin/python
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
        sudo ca-certificates \
-       make \
-       build-essential \
-       libssl-dev \
-       zlib1g-dev \
-       libbz2-dev \
-       libreadline-dev \
-       libsqlite3-dev \
+       make build-essential \
        wget \
        curl \
-       llvm \
-       libncurses5-dev \
-       libncursesw5-dev \
-       xz-utils \
-       tk-dev \
-       libffi-dev \
-       liblzma-dev \
-       python-openssl \
        git \
-       python3 \
-    \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3 1\
     \
     && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && echo 'export PATH="/root/.pyenv/bin:$PATH"' >> ~/.bashrc \
@@ -46,5 +29,7 @@ RUN apt-get -qq update \
     && pyenv install 3.7.6 \
     && pyenv install 3.5.9 \
     && pyenv install 2.7.17
+
+RUN apt-get -qq remove make build-essential git
 
 #ENTRYPOINT ["/bin/bash"]
