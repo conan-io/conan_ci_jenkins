@@ -32,6 +32,7 @@ language: minimal
 before_install:
   - |
     count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
+    echo ">>> $TRAVIS_COMMIT_MESSAGE <<<"
     if [[ "$TRAVIS_COMMIT_MESSAGE" =~ /.*docker_images.*/ ]]
     then
       echo "Force docker_image"
