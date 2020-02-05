@@ -36,7 +36,7 @@ before_install:
     then
       echo "Force docker_image"
     else
-      echo "NO force docker_image
+      echo "NO force docker_image"
     fi
     if [ $count -ne 0 ]
     then
