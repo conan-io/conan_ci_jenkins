@@ -4,7 +4,12 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-COPY environment.sh /root/environment.sh
+#COPY environment.sh /root/environment.sh
+
+ENV PY27 /root/.pyenv/versions/2.7.17/bin/python
+ENV PY36 /root/.pyenv/versions/3.6.10/bin/python
+ENV PY37 /root/.pyenv/versions/3.7.6/bin/python
+ENV PY38 /root/.pyenv/versions/3.8.1/bin/python
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
