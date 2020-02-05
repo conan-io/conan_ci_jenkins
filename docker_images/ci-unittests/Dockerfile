@@ -14,11 +14,10 @@ ENV PY38 /root/.pyenv/versions/3.8.1/bin/python
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
        sudo ca-certificates \
-       make build-essential \
-       zlib1g-dev \
-       wget \
-       curl \
-       git \
+       # pyenv requires
+       make build-essential libssl-dev zlib1g-dev libbz2-dev \
+       libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+       xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
     \
     && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && echo 'export PATH="/root/.pyenv/bin:$PATH"' >> ~/.bashrc \
