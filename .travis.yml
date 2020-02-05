@@ -5,14 +5,16 @@ stages:
 jobs:
   include:
     # Run tests for the Python code
-    - language: python
+    - name: Run Python tests
+      language: python
       python: 3.8
       script:
         - python -m unittest python_runner/tests/runner_test.py
       after_success:
 
     # Run tests for Groovy
-    - language: groovy
+    - name: Run Groovy tests
+      language: groovy
       before_script:
         - ./gradlew assemble
       script:
@@ -20,9 +22,10 @@ jobs:
       after_success:
 
     # Generate docker images (only if modified)
-    - stage: docker conanio/conantests
+    - stage: docker
+      name: conanio/conantests
       env: 
-        - IMAGE=conan_tests
+        - IMAGE=conantests
         - LINTER=false
 
 language: minimal
