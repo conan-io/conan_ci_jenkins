@@ -1,28 +1,24 @@
-import unittest
 import os
+import re
 import subprocess
+import unittest
+
+from packaging.version import parse, VERSION_PATTERN
+from parameterized import parameterized
 
 
 class CIUnittestsTestCase(unittest.TestCase):
     """ Check Python versions are available and environment variables """
-    
-    def test_py27(self):
-        python_bin = os.environ["PY27"]
-        out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
-        self.assertTrue(out.startswith("Python 2.7"))
 
-    def test_py35(self):
-        python_bin = os.environ["PY35"]
-        out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
-        self.assertTrue(out.startswith("Python 3.5"))
+    re_py_version = re.compile(r'^Python (\d+\.\d+\.\d+)')
 
-    def test_py37(self):
-        python_bin = os.environ["PY37"]
+    @parameterized.expand(["PY27", "2.7"], 
+                          ["PY35", "3.5"], 
+                          ["PY37", "3.7"], 
+                          ["PY38", "3.8"], )
+    def test_environment_variables(self, env_var, version):
+        python_bin = os.environ[env_var]
         out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
-        self.assertTrue(out.startswith("Python 3.7"))
-
-    def test_py38(self):
-        python_bin = os.environ["PY38"]
-        out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
-        self.assertTrue(out.startswith("Python 3.8"))
-
+        m = self.re_py_version.match(out)
+        v = parse(m.group(1))
+        self.assertGreaterEqual(v, parse(version))
