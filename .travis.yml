@@ -29,6 +29,8 @@ language: minimal
 before_install:
   - |
     count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
+    force_docker= $TRAVIS_COMMIT_MESSAGE =~ /.*docker_images.*/
+    echo "Force docker: $force_docker"
     if [ $count -ne 0 ]
     then
       echo "Build docker images"
