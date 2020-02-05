@@ -19,7 +19,7 @@ class CIUnittestsTestCase(unittest.TestCase):
     def test_python_envvars(self, env_var, version):
         python_bin = os.environ[env_var]
         out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
-        m = self.re_py_version.match(out)
+        m = self.re_py_version.match(out.decode())
         v = parse(m.group(1))
         self.assertEqual(v.release[0], version[0])
         self.assertEqual(v.release[1], version[1])
