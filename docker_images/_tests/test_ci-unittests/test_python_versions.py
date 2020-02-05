@@ -12,10 +12,10 @@ class CIUnittestsTestCase(unittest.TestCase):
 
     re_py_version = re.compile(r'^Python (\d+\.\d+\.\d+)')
 
-    @parameterized.expand(["PY27", (2, 7)],
-                          ["PY35", (3, 5)],
-                          ["PY37", (3, 7)],
-                          ["PY38", (3, 8)], )
+    @parameterized.expand([("PY27", (2, 7)),
+                           ("PY35", (3, 5)),
+                           ("PY37", (3, 7)),
+                           ("PY38", (3, 8)),])
     def test_python_envvars(self, env_var, version):
         python_bin = os.environ[env_var]
         out, _ = subprocess.Popen([python_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()
