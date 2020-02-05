@@ -15,6 +15,7 @@ RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
        sudo ca-certificates \
        make build-essential \
+       zlib1g-dev \
        wget \
        curl \
        git \
