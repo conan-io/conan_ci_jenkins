@@ -25,12 +25,21 @@ jobs:
       after_success:
 
     # Generate docker images (only if modified)
+<<<<<<< HEAD
     - stage: docker
       name: conanio/conantests
       env: 
         - IMAGE=conantests
         - LINTER=false
     - name: conanio/ci-unittests
+=======
+    #- stage: docker conanio/conantests
+    #  env: 
+    #    - IMAGE=conan_tests
+    #    - LINTER=false
+    - stage: docker
+      name: conanio/ci-unittests
+>>>>>>> let's run tests inside docker images
       env: 
         - IMAGE=ci-unittests
     - name: conanio/ci-functional
@@ -59,6 +68,7 @@ script:
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/$IMAGE
+  - docker exec conanio/$IMAGE -v docker_images/_tests:/home/tests /bin/bash -c "export PY_DEFAULT=\$PY38 && IMAGE=$IMAGE && /home/tests/run_tests.sh"
 
 after_success:
   - |
