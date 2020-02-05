@@ -1,3 +1,4 @@
-echo "Running tests"
-$PY_DEFAULT -m pip install pytest
-$PY_DEFAULT -m pytest test_$IMAGE/
+echo "Running tests using $PYTHON"
+$PYTHON -m pip install -U pip
+$PYTHON -m pip install pytest parameterized
+$PYTHON -m pytest /home/tests/test_$IMAGE/
