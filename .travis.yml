@@ -63,7 +63,7 @@ script:
   - |
     if [[ "$LINTER" != "false" ]]
     then
-      docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile; 
+      docker run --rm -i hadolint/hadolint < docker_images/$IMAGE/Dockerfile || true;
     fi
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
