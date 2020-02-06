@@ -20,10 +20,9 @@ RUN apt-get -qq update \
        xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
     \
     && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
-    && echo 'export PATH="/root/.pyenv/bin:$PATH"' >> ~/.bashrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-    && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc \
-    && . ~/.bashrc \
+    && export PATH="/root/.pyenv/bin:$PATH" \
+    && pyenv init - \
+    && pyenv virtualenv-init - \
     && pyenv update \
     && pyenv install 3.8.1 \
     && pyenv install 3.7.6 \
