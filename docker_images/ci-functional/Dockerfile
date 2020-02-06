@@ -33,4 +33,23 @@ RUN apt-get -qq install -y --no-install-recommends \
     clang-9 clang-7 \
     g++-9-multilib g++-7-multilib
 
-#ENTRYPOINT ["/bin/bash"]
+# Alternatives for GCC
+COPY select_gcc.sh /root/select_gcc.sh
+RUN chmod +x /root/select_gcc.sh &&\
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 10 &&\
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 20 &&\
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 10 &&\
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 20
+
+# Alternatives for Clang
+COPY select_clang.sh /root/select_clang.sh
+RUN chmod +x /root/select_clang.sh &&\
+    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-9 10 &&\
+    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-7 20 &&\
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-9 10 &&\
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-7 20
+
+COPY select_alternatives.sh /root/select_alternatives.sh
+RUN chmod +x /root/select_alternatives.sh
+ENTRYPOINT ["/root/select_alternatives.sh" ]
+CMD ["gcc", "9", "clang", "9"]
