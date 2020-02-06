@@ -7,13 +7,18 @@ from packaging.version import VERSION_PATTERN, parse
 from parameterized import parameterized
 
 
-class CIUnittestsTestCase(unittest.TestCase):
+class PythonVersionsTestCase(unittest.TestCase):
     """ Check Python versions are available and environment variables """
 
     re_py_version = re.compile(r'^Python (\d+\.\d+\.\d+)')
 
-    @parameterized.expand([("PY27", (2, 7)),
-                           ("PY35", (3, 5)),
+    def test_py2_envar(self):
+        """ Look for PY27 env variable and check version """
+        python_bin = os.environ["PY27"]
+        out, _ = subprocess.Popen([python_bin, '-c', 'import sys; print(sys.version)'], stdout=subprocess.PIPE, shell=False).communicate()
+        self.assertRegex(out.decode(), r'^2\.7\.\d+\s')
+
+    @parameterized.expand([("PY35", (3, 5)),
                            ("PY37", (3, 7)),
                            ("PY38", (3, 8)),])
     def test_python_envvars(self, env_var, version):
@@ -23,6 +28,10 @@ class CIUnittestsTestCase(unittest.TestCase):
         v = parse(m.group(1))
         self.assertEqual(v.release[0], version[0])
         self.assertEqual(v.release[1], version[1])
+
+
+class SystemToolsTestCase(unittest.TestCase):
+    """ This image doesn't have any system tool """
 
     def test_cmake_not_available(self):
         with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'cmake'"):
