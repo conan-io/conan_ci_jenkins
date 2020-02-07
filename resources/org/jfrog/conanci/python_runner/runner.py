@@ -56,7 +56,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
         traverse_namespace = "--traverse-namespace"
 
     #  --nocapture
-    command = "set && virtualenv --python \"{pyenv}\" \"{venv_dest}\" && " \
+    command = "virtualenv --python \"{pyenv}\" \"{venv_dest}\" && " \
               "{source_cmd} \"{venv_exe}\" && " \
               "{pip_installs} " \
               "python setup.py install && " \
@@ -97,8 +97,6 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
 
     with chdir(source_folder):
         with environment_append(env):
-            from pprint import pprint
-            pprint(env)
             run(command)
 
 
