@@ -83,7 +83,8 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     env["PYTHONPATH"] = source_folder
     env["CONAN_LOGGING_LEVEL"] = "50" if platform.system() == "Darwin" else "50"
     env["CHANGE_AUTHOR_DISPLAY_NAME"] = ""
-    env["TESTING_REVISIONS_ENABLED"] = "True" if flavor == "enabled_revisions" else "False"
+    if flavor == "enabled_revisions":
+        env["TESTING_REVISIONS_ENABLED"] = "True"
     if pyver.startswith("py2"):
         env["USE_UNSUPPORTED_CONAN_WITH_PYTHON_2"] = "True"
     # Related with the error: LINK : fatal error LNK1318: Unexpected PDB error; RPC (23) '(0x000006BA)'
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     parser.add_argument('--num_cores', type=int, help='Number of cores to use', default=3)
     parser.add_argument('--exclude_tags', '-e', nargs=1, action=Extender,
                         help='Tags to exclude from testing, e.g.: rest_api')
-    parser.add_argument('--flavor', '-f', help='enabled_revisions, disabled_revisions')
+    parser.add_argument('--flavor', '-f', help='enabled_revisions (or nothing)')
     args = parser.parse_args()
 
     if args.include_tags and args.exclude_tags:
