@@ -6,11 +6,13 @@ class TestRunner {
     private static final String restTmpBase = "/tmp/"
     private static final String numCores = "3"
     private script;
+    private final String branch;
     private TestLevelConfig testLevelConfig
 
-    TestRunner(script){
+    TestRunner(script, branch){
         testLevelConfig = new TestLevelConfig(script)
         this.script = script
+        this.branch = branch
     }
 
 
