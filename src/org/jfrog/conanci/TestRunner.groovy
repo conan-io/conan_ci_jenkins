@@ -45,6 +45,10 @@ class TestRunner {
         return revisionsEnabled ? "enabled_revisions" : "disabled_revisions"
     }
 
+    private static String getFlavorCommandLine(boolean revisionsEnabled){
+        return revisionsEnabled ? " --flavor enabled_revisions" : ""
+    }
+
     void runRESTTests(){
         List<String> excludedTags = []
         List<String> includedTags = ["rest_api", "local_bottle"]
@@ -136,6 +140,7 @@ class TestRunner {
             eTags += " -i " + includedTags.join(' -i ')
         }
         String flavor = getFlavor(revisionsEnabled)
+        String flavor_cmd = getFlavorCommandLine(revisionsEnabled)
 
         def ret = {
             script.node(slaveLabel) {
