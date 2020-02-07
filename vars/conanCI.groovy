@@ -13,11 +13,11 @@ if(causeClass == "jenkins.branch.BranchIndexingCause"){
 }
 
 
-def runBuild(script) {
+def runBuild(script, branch) {
     script.get_jenkins_instance = {
         return Jenkins.instance
     }
 
-    new TestRunner(script).run()
+    new TestRunner(script, branch).run()
 }
 
