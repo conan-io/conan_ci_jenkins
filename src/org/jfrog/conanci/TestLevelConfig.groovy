@@ -37,11 +37,9 @@ class TestLevelConfig {
                     script.checkout(script.scm)
                     script.sh("docker pull conanio/conantests")
                     script.docker.image('conanio/conantests').inside("-e GH_TOKEN=${script.GH_TOKEN}"){
-                        script.sh("ls -la")
-                        script.sh("pwd")
-                        script.sh("rm -rf conan_ci_jenkins")
-                        script.sh(script: 'git clone https://github.com/conan-io/conan_ci_jenkins')
-                        script.sh(script: "python conan_ci_jenkins/python_runner/pr_tags.py out.json ${script.env.BRANCH_NAME}")
+                        def pr_tags = script.libraryResource('org/jfrog/conanci/python_runner/pr_tags.py')
+                        script.writeFile file: "pr_tags.py", text: pr_tags
+                        script.sh(script: "python pr_tags.py out.json ${script.env.BRANCH_NAME}")
                         def info = script.readJSON file: 'out.json'
 
                         excludedTags.addAll(info["tags"])

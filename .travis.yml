@@ -8,13 +8,16 @@ jobs:
     - name: Run Python tests
       language: python
       python: 3.8
+      before_install:
       script:
+        - cd resources/org/jfrog/conanci
         - python -m unittest python_runner/tests/runner_test.py
       after_success:
 
     # Run tests for Groovy
     - name: Run Groovy tests
       language: groovy
+      before_install:
       before_script:
         - ./gradlew assemble
       script:
