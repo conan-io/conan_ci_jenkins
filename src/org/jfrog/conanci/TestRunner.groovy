@@ -190,7 +190,7 @@ class TestRunner {
                         try {
 
                             script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
-                                script.bat(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} --flavor ${flavor} ${eTags}")
+                                script.bat(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
                         finally {
@@ -200,7 +200,7 @@ class TestRunner {
                     } else if (slaveLabel == "Macos") {
                         try {
                             script.withEnv(['PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin']) {
-                                script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} --flavor ${flavor} ${eTags}")
+                                script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
                         finally {
@@ -212,7 +212,7 @@ class TestRunner {
                         try {
                             script.sh("docker pull conanio/conantests")
                             script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
-                                script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} --flavor ${flavor} ${eTags}")
+                                script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
                         finally {
