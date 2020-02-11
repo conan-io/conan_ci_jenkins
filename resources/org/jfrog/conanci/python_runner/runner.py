@@ -56,8 +56,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
         traverse_namespace = "--traverse-namespace"
 
     #  --nocapture
-    command = "pip install \"virtualenv<20.0.0\" && " \
-              "virtualenv --python \"{pyenv}\" \"{venv_dest}\" && " \
+    command = "virtualenv --python \"{pyenv}\" \"{venv_dest}\" && " \
               "{source_cmd} \"{venv_exe}\" && " \
               "{pip_installs} " \
               "python setup.py install && " \
