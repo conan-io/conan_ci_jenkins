@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-echo "Set GCC version $1"
+echo "Set GCC version $1" 1>&2
 
 if [ ! -f "/usr/bin/gcc-$1" ] || [ ! -f "/usr/bin/g++-$1" ]; then
     echo "no such version gcc/g++ installed" 1>&2
