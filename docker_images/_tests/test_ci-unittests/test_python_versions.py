@@ -28,19 +28,3 @@ class PythonVersionsTestCase(unittest.TestCase):
         v = parse(m.group(1))
         self.assertEqual(v.release[0], version[0])
         self.assertEqual(v.release[1], version[1])
-
-
-class SystemToolsTestCase(unittest.TestCase):
-    """ This image doesn't have any system tool """
-
-    def test_cmake_not_available(self):
-        with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'cmake'"):
-            subprocess.Popen(['cmake',]).communicate()
-
-    def test_git_not_available(self):
-        with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'git'"):
-            subprocess.Popen(['git',]).communicate()
-
-    def test_gcc_not_available(self):
-        with self.assertRaisesRegex(FileNotFoundError, "No such file or directory: 'gcc'"):
-            subprocess.Popen(['gcc',]).communicate()
