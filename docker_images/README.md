@@ -8,7 +8,7 @@ PY35, PY37,...
 
 ## ci-functional
 
-This image contains the same Python versions as the one above, and also **system tools** like Git, CMake,
+This image contains the same Python versions as `ci-unittests`, and **system tools** like Git, CMake,
 GCC or Clang. The installed versions are available using environment variables and they can also
 be installed when starting the container:
 
