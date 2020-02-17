@@ -8,7 +8,7 @@ from parameterized import parameterized
 
 
 class PythonVersionsTestCase(unittest.TestCase):
-    """ Check Python versions are available and environment variables """
+    """ Check Python versions are available using environment variables """
 
     re_py_version = re.compile(r'^Python (\d+\.\d+\.\d+)')
 
