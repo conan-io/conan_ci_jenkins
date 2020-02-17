@@ -59,7 +59,7 @@ script:
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
   - docker tag travis-ci-$IMAGE conanio/$IMAGE
-  - docker run -v "$(pwd)/docker_images/_tests:/home/tests" --env IMAGE=$IMAGE conanio/$IMAGE /bin/bash -c "export PYTHON=\$PY38 && /home/tests/run_tests.sh"
+  - docker run -v "$(pwd)/docker_images/_tests:/home/tests" --env IMAGE=$IMAGE conanio/$IMAGE gcc 12 clang 12 -c "export PYTHON=\$PY38 && /home/tests/run_tests.sh"
 
 after_success:
   - |
