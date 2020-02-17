@@ -29,4 +29,4 @@ RUN apt-get -qq update \
 
 RUN apt-get -qq remove make build-essential git gcc
 
-#ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/bash"]
