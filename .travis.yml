@@ -25,21 +25,12 @@ jobs:
       after_success:
 
     # Generate docker images (only if modified)
-<<<<<<< HEAD
-    - stage: docker
-      name: conanio/conantests
-      env: 
-        - IMAGE=conantests
-        - LINTER=false
-    - name: conanio/ci-unittests
-=======
     #- stage: docker conanio/conantests
     #  env: 
     #    - IMAGE=conan_tests
     #    - LINTER=false
     - stage: docker
       name: conanio/ci-unittests
->>>>>>> let's run tests inside docker images
       env: 
         - IMAGE=ci-unittests
     - name: conanio/ci-functional
