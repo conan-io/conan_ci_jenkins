@@ -10,7 +10,7 @@ ENV PY37 /root/.pyenv/versions/3.7.6/bin/python
 ENV PY38 /root/.pyenv/versions/3.8.1/bin/python
 
 ENV CMAKE_3_16_4 /root/conan_packages/.conan/data/cmake/3.16.4/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake
-ENV CMAKE_3_16_3 /root/conan_packages/.conan/data/cmake/3.16.4/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake
+ENV CMAKE_3_16_3 /root/conan_packages/.conan/data/cmake/3.16.3/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake
 
 ENV GCC_7 /usr/bin/gcc-7
 ENV GXX_7 /usr/bin/g++-7
