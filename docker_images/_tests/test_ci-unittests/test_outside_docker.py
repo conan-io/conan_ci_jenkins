@@ -10,7 +10,8 @@ import pytest
 
 @pytest.mark.outside
 class OutsideDockerTests(unittest.TestCase):
+    docker_image = f'{os.environ["DOCKER_USERNAME"]}/{os.environ["IMAGE"]}'
 
     def test_unittests_image(self):
-        out, _ = subprocess.Popen(['docker', 'run', 'conanio/' + os.environ["IMAGE"], '-c', 'cat /etc/lsb-release'], stdout=subprocess.PIPE, shell=False).communicate()
+        out, _ = subprocess.Popen(['docker', 'run', self.docker_image, '-c', 'cat /etc/lsb-release'], stdout=subprocess.PIPE, shell=False).communicate()
         self.assertIn("DISTRIB_ID=Ubuntu", out.decode())
