@@ -13,5 +13,5 @@ import pytest
 class OutsideDockerTests(unittest.TestCase):
 
     def test_functional_image(self):
-        out, _ = subprocess.Popen(['docker', 'run', os.environ["IMAGE"], 'gcc', '7', 'clang', '9', 'cmake', '3.16.4', '-c', 'cat /etc/lsb-release'], stdout=subprocess.PIPE, shell=False).communicate()
+        out, _ = subprocess.Popen(['docker', 'run', 'conanio/' + os.environ["IMAGE"], 'gcc', '7', 'clang', '9', 'cmake', '3.16.4', '-c', 'cat /etc/lsb-release'], stdout=subprocess.PIPE, shell=False).communicate()
         self.assertIn("DISTRIB_ID=Ubuntu", out.decode())
