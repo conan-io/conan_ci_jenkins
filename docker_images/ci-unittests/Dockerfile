@@ -25,8 +25,9 @@ RUN apt-get -qq update \
     && pyenv install 3.8.1 \
     && pyenv install 3.7.6 \
     && pyenv install 3.5.9 \
-    && pyenv install 2.7.17
-
-RUN apt-get -qq remove make build-essential git gcc
+    && pyenv install 2.7.17 \
+    # Remove not needed things
+    && apt-get -qq remove make build-essential git gcc \
+    && rm -rf /var/lib/apt/lists
 
 ENTRYPOINT ["/bin/bash"]
