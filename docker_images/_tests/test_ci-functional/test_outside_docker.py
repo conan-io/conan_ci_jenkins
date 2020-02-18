@@ -30,5 +30,4 @@ class OutsideDockerTests(unittest.TestCase):
     @parameterized.expand([("3.16.4", ), ("3.16.3", ), ])
     def test_change_cmake_version(self, cmake_version):
         out, _ = subprocess.Popen(['docker', 'run', 'conanio/' + os.environ["IMAGE"], 'gcc', '7', 'clang', '9', 'cmake', cmake_version, '-c', 'cmake --version'], stdout=subprocess.PIPE, shell=False).communicate()
-        last_line = out.splitlines()[-1]
-        self.assertEqual(last_line.decode().strip(), f'cmake version {cmake_version}')
+        self.assertIn(f'cmake version {cmake_version}', out.decode())
