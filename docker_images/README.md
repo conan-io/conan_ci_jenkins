@@ -10,7 +10,7 @@ PY35, PY37,...
 
 This image contains the same Python versions as `ci-unittests`, but it also contains **system tools**
 like Git, CMake, GCC or Clang. The installed versions are available using environment variables and
-they can also be installed when starting the container:
+they can also be installed like the preferred alternative when starting the container:
 
 ```
 docker run -it travis-ci-ci-functional:latest gcc 7 clang 9 cmake 3.16.4
