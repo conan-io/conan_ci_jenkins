@@ -25,15 +25,15 @@ jobs:
       after_success:
 
     # Generate docker images (only if modified)
-    #- stage: docker conanio/conantests
+    #- stage: docker $DOCKER_USERNAME/conantests
     #  env: 
     #    - IMAGE=conan_tests
     #    - LINTER=false
     - stage: docker
-      name: conanio/ci-unittests
+      name: $DOCKER_USERNAME/ci-unittests
       env: 
         - IMAGE=ci-unittests
-    - name: conanio/ci-functional
+    - name: $DOCKER_USERNAME/ci-functional
       env: 
        - IMAGE=ci-functional
        - IMAGE_ARGS="gcc 12 clang 12 cmake 12"  # Non valid values
@@ -51,7 +51,7 @@ before_install:
       travis_terminate 0
     fi
 script:
-  - echo "Building docker image 'conanio/$IMAGE'"
+  - echo "Building docker image '$DOCKER_USERNAME/$IMAGE'"
   - |
     if [[ "$LINTER" != "false" ]]
     then
@@ -59,16 +59,16 @@ script:
     fi
   - docker build -t travis-ci-$IMAGE docker_images/$IMAGE
   - docker images
-  - docker tag travis-ci-$IMAGE conanio/$IMAGE
+  - docker tag travis-ci-$IMAGE $DOCKER_USERNAME/$IMAGE
   # Run tests outside the docker image
   - . $(pwd)/docker_images/_tests/run_outside_tests.sh $(pwd)/docker_images/_tests/test_$IMAGE/
   # Run some tests inside the image
-  - docker run -v "$(pwd)/docker_images/_tests:/home/tests" --env IMAGE=$IMAGE conanio/$IMAGE $IMAGE_ARGS -c "export PYTHON=\$PY38 && /home/tests/run_tests.sh"
+  - docker run -v "$(pwd)/docker_images/_tests:/home/tests" --env IMAGE=$IMAGE $DOCKER_USERNAME/$IMAGE $IMAGE_ARGS -c "export PYTHON=\$PY38 && /home/tests/run_tests.sh"
 
 after_success:
   - |
     if [[ "$TRAVIS_BRANCH" =~ "^(staging|master)$" && "${TRAVIS_PULL_REQUEST}" == "false" ]]
     then
       echo $DOCKER_TOKEN | docker login --username $DOCKER_USERNAME --password-stdin;
-      docker push conanio/$IMAGE;
+      docker push $DOCKER_USERNAME/$IMAGE;
     fi
