@@ -22,10 +22,11 @@ class OutsideDockerTests(unittest.TestCase):
         last_line = out.splitlines()[-1]
         self.assertEqual(last_line.decode().strip(), gcc_version)
 
-    @parameterized.expand([("7", "7.0.1"), ("9", "9.0.0"), ])
+    @parameterized.expand([("7", "7.0.1-9build1 (tags/RELEASE_701/final)"), 
+                           ("9", "9.0.0-2 (tags/RELEASE_900/final)"), ])
     def test_change_clang_version(self, clang_version, expected):
         out, _ = subprocess.Popen(['docker', 'run', 'conanio/' + os.environ["IMAGE"], 'gcc', '7', 'clang', clang_version, 'cmake', '3.16.4', '-c', 'clang --version'], stdout=subprocess.PIPE, shell=False).communicate()
-        self.assertIn(f'clang version {expected}-9build1 (tags/RELEASE_701/final)', out.decode())
+        self.assertIn(f'clang version {expected}', out.decode())
 
     @parameterized.expand([("3.16.4", ), ("3.16.3", ), ])
     def test_change_cmake_version(self, cmake_version):
