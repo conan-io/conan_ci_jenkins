@@ -6,10 +6,10 @@ import unittest
 from packaging.version import VERSION_PATTERN, parse
 from parameterized import parameterized
 
-clangxx_7 = os.environ["CLANGXX_7"]
-clang_7 = os.environ["CLANG_7"]
-clangxx_9 = os.environ["CLANGXX_9"]
-clang_9 = os.environ["CLANG_9"]
+clangxx_7 = os.environ.get("CLANGXX_7", None)
+clang_7 = os.environ.get("CLANG_7", None)
+clangxx_9 = os.environ.get("CLANGXX_9", None)
+clang_9 = os.environ.get("CLANG_9", None)
 
 
 class ClangTestCase(unittest.TestCase):

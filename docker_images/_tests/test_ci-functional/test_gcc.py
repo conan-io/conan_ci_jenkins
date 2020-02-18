@@ -7,10 +7,10 @@ from packaging.version import VERSION_PATTERN, parse
 from parameterized import parameterized
 
 
-gxx_7 = os.environ["GXX_7"]
-gcc_7 = os.environ["GCC_7"]
-gxx_9 = os.environ["GXX_9"]
-gcc_9 = os.environ["GCC_9"]
+gxx_7 = os.environ.get("GXX_7", None)
+gcc_7 = os.environ.get("GCC_7", None)
+gxx_9 = os.environ.get("GXX_9", None)
+gcc_9 = os.environ.get("GCC_9", None)
 
 
 class GCCTestCase(unittest.TestCase):
