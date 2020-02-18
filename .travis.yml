@@ -39,7 +39,7 @@ jobs:
        - IMAGE_ARGS="gcc 12 clang 12 cmake 12"  # Non valid values
     
       
-language: minimal
+language: python
 before_install:
   - |
     count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
