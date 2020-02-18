@@ -12,6 +12,6 @@ import pytest
 @pytest.mark.outside
 class OutsideDockerTests(unittest.TestCase):
 
-    def test_functional_image(self):
-        out, _ = subprocess.Popen(['docker', 'run', os.environ["IMAGE"], 'gcc', '7', 'clang', '9', 'cmake', '3.16.4', '-c', 'cat /etc/lsb-release'], stdout=subprocess.PIPE, shell=False).communicate()
+    def test_unittests_image(self):
+        out, _ = subprocess.Popen(['docker', 'run', os.environ["IMAGE"], '-c', 'cat /etc/lsb-release'], stdout=subprocess.PIPE, shell=False).communicate()
         self.assertIn("DISTRIB_ID=Ubuntu", out.decode())
