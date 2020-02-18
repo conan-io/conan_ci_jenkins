@@ -63,7 +63,7 @@ script:
   # Run tests outside the docker image
   - . $(pwd)/docker_images/_tests/run_outside_tests.sh $(pwd)/docker_images/_tests/test_$IMAGE/
   # Run some tests inside the image
-  - docker run -v "$(pwd)/docker_images/_tests:/home/tests" --env IMAGE=$IMAGE $DOCKER_USERNAME/$IMAGE $IMAGE_ARGS -c "export PYTHON=\$PY38 && /home/tests/run_tests.sh"
+  - docker run -v "$(pwd)/docker_images/_tests:/home/tests" --env IMAGE=$IMAGE --env DOCKER_USERNAME=$DOCKER_USERNAME $DOCKER_USERNAME/$IMAGE $IMAGE_ARGS -c "export PYTHON=\$PY38 && /home/tests/run_tests.sh"
 
 after_success:
   - |
