@@ -22,6 +22,11 @@ ENV CLANGXX_7 /usr/bin/clang++-7
 ENV CLANG_9 /usr/bin/clang-9
 ENV CLANGXX_9 /usr/bin/clang++-9
 
+COPY select_cmake.sh \
+     select_gcc.sh \
+     select_clang.sh \
+     select_alternatives.sh \
+     /root/
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
@@ -40,45 +45,45 @@ RUN apt-get -qq update \
     && pyenv install 3.8.1 \
     && pyenv install 3.7.6 \
     && pyenv install 3.5.9 \
-    && pyenv install 2.7.17
-
-# Install CMake versions (using Conan) and register alternatives
-RUN $PY38 -m venv ./conan_tmp && cd ./conan_tmp \
+    && pyenv install 2.7.17 \
+    #
+    # Install CMake versions (using Conan) and register alternatives
+    && $PY38 -m venv ./conan_tmp && cd ./conan_tmp \
     && ./bin/pip install conan \
     && export CONAN_USER_HOME=/root/conan_packages/ \
     && ./bin/conan install cmake/3.16.4@ \
     && ./bin/conan install cmake/3.16.3@ \
     && ./bin/pip uninstall -y conan \
-    && cd .. && rm -fr ./conan_tmp
+    && cd .. && rm -fr ./conan_tmp \
+    #
+    # Alternatives for CMake
+    && chmod +x /root/select_cmake.sh \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_4 10 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_3 20 \
+    #
+    # Install compilers: g++ and clang++
+    && apt-get -qq install -y --no-install-recommends \
+       clang-9 clang-7 \
+       g++-9-multilib g++-7-multilib \
+    #
+    # Alternatives for GCC
+    && chmod +x /root/select_gcc.sh \
+    && update-alternatives --install /usr/bin/gcc gcc $GCC_9 10 \
+    && update-alternatives --install /usr/bin/gcc gcc $GCC_7 20 \
+    && update-alternatives --install /usr/bin/g++ g++ $GXX_9 10 \
+    && update-alternatives --install /usr/bin/g++ g++ $GXX_7 20 \
+    #
+    # Alternatives for Clang
+    && chmod +x /root/select_clang.sh \
+    && update-alternatives --install /usr/bin/clang clang $CLANG_9 10 \
+    && update-alternatives --install /usr/bin/clang clang $CLANG_7 20 \
+    && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_9 10 \
+    && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_7 20 \
+    #
+    && chmod +x /root/select_alternatives.sh \
+    #
+    # Clean the image
+    && rm -rf /var/lib/apt/lists
 
-# Alternatives for CMake
-COPY select_cmake.sh /root/select_cmake.sh
-RUN chmod +x /root/select_cmake.sh \
-    && update-alternatives --install /usr/bin/cmake cmake /root/conan_packages/.conan/data/cmake/3.16.4/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake 10 \
-    && update-alternatives --install /usr/bin/cmake cmake /root/conan_packages/.conan/data/cmake/3.16.3/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake 20
-
-# Install compilers: g++ and clang++
-RUN apt-get -qq install -y --no-install-recommends \
-    clang-9 clang-7 \
-    g++-9-multilib g++-7-multilib
-
-# Alternatives for GCC
-COPY select_gcc.sh /root/select_gcc.sh
-RUN chmod +x /root/select_gcc.sh &&\
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 10 &&\
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 20 &&\
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 10 &&\
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 20
-
-# Alternatives for Clang
-COPY select_clang.sh /root/select_clang.sh
-RUN chmod +x /root/select_clang.sh &&\
-    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-9 10 &&\
-    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-7 20 &&\
-    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-9 10 &&\
-    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-7 20
-
-COPY select_alternatives.sh /root/select_alternatives.sh
-RUN chmod +x /root/select_alternatives.sh
 ENTRYPOINT ["/root/select_alternatives.sh" ]
 CMD ["gcc", "9", "clang", "9", "cmake", "3.16.4"]
