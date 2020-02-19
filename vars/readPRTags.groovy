@@ -17,11 +17,9 @@ def call(String branchName, String GH_TOKEN) {
     // GET /repos/:owner/:repo/pulls/:pull_number
     def get = new URL("https://api.github.com/repos/conan-io/conan/pulls/${prNumber}").openConnection();
     def getRC = get.getResponseCode();
-    println(getRC);
     if(getRC.equals(200)) {
-        List json = new JsonSlurper().parseText(get.getInputStream().getText())
-        echo json['body']
-        //println(get.getInputStream().getText());
+        def json = new JsonSlurper().parseText(get.getInputStream().getText())
+        echo json.body
     }
 
     //String getResult = new URL("https://api.github.com/repos/conan-io/conan/pulls/${prNumber}").text
