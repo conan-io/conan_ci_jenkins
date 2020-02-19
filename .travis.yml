@@ -42,6 +42,8 @@ jobs:
 language: python
 before_install:
   - | # Do not build docker images if they are not modified (unles it is branch 'staging' or 'master')
+    echo "Travis branch: $TRAVIS_BRANCH"
+    echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
     count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
     if [ $count -ne 0 ]
     then
