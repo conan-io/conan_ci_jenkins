@@ -1,0 +1,153 @@
+digraph G {
+    rankdir=LR;
+    graph [fontsize=10 fontname="Verdana"];
+    node [shape=record fontsize=10 fontname="Verdana"];
+
+    Start [shape = diamond];
+    End [shape = diamond];
+
+    subgraph cluster_nightly {
+        label = "Nightly/Preflight";
+
+        subgraph cluster_regular {
+            label = "Regular testing";
+
+            # First stage to test everything related to Python
+            in_stage_0 [style=invisible,fixedsize=true,width=0,height=0];
+            out_stage_0 [style=invisible,fixedsize=true,width=0,height=0];
+
+            subgraph cluster_stage_0 {
+                label = "Unittests\n(raw python)";
+                rank = same;
+                py36;
+                py37;
+                py38;
+                py_any [label="..."];
+            }
+
+            Start -> in_stage_0 [arrowhead=none];
+            in_stage_0 -> py36 -> out_stage_0 [arrowhead=none];
+            in_stage_0 -> py37 -> out_stage_0 [arrowhead=none];
+            in_stage_0 -> py38 -> out_stage_0 [arrowhead=none];
+            in_stage_0 -> py_any -> out_stage_0 [arrowhead=none];
+
+            # Second stage to test some functional integrations, system tools are needed, but only
+            #   one version is provided
+            in_stage_1 [style=invisible,fixedsize=true,width=0,height=0];
+            out_stage_1 [style=invisible,fixedsize=true,width=0,height=0];
+
+            subgraph cluster_stage_1 {
+                label = "Functional\nCMake + compiler";
+                rank = same;
+                py3_win;
+                py3_mac;
+                py3_linux;
+            } 
+
+            out_stage_0 -> in_stage_1 [arrowhead=none];
+            in_stage_1 -> py3_win -> out_stage_1 [arrowhead=none];
+            in_stage_1 -> py3_mac -> out_stage_1 [arrowhead=none];
+            in_stage_1 -> py3_linux -> out_stage_1 [arrowhead=none];
+
+            # Third stage: several versions of system tools available. These tests should ensure
+            #   they are using the one expected
+            in_stage_2 [style=invisible,fixedsize=true,width=0,height=0];
+            out_stage_2 [style=invisible,fixedsize=true,width=0,height=0];
+
+            subgraph cluster_stage_2 {
+                label = "Integration\nSeveral versions available\nChange defaults";
+                rank = same;
+                win_vs_2019;
+                win_vs_2017;
+                win_cmake_x;
+
+                mac_cmake_x;
+
+                linux_gcc;
+                linux_clang;
+                linux_cmake;
+                linux_xbuild;
+            }
+
+            out_stage_1 -> in_stage_2 [arrowhead=none];
+            in_stage_2 -> win_vs_2019 -> out_stage_2 [arrowhead=none];
+            in_stage_2 -> win_vs_2017 -> out_stage_2 [arrowhead=none];
+            in_stage_2 -> win_cmake_x -> out_stage_2 [arrowhead=none];
+            in_stage_2 -> mac_cmake_x -> out_stage_2 [arrowhead=none];
+            in_stage_2 -> linux_gcc -> out_stage_2 [arrowhead=none];
+            in_stage_2 -> linux_clang -> out_stage_2 [arrowhead=none];
+            in_stage_2 -> linux_cmake -> out_stage_2 [arrowhead=none];
+            in_stage_2 -> linux_xbuild -> out_stage_2 [arrowhead=none];
+        }
+
+        # Next step: Check we haven't break recipes from Conan Center
+        in_stage_3 [style=invisible,fixedsize=true,width=0,height=0];
+        out_stage_3 [style=invisible,fixedsize=true,width=0,height=0];
+
+        subgraph cluster_stage_3 {
+            label = "Tests recipes conan-center";
+            rank = same;
+            poco_1_10 [label="poco/1.10"];
+            zlib_1_2_11 [label="zlib/1.2.11"];
+            recipe_x [label="..."];
+        }
+        
+        out_stage_2 -> in_stage_3 [arrowhead=none];
+        in_stage_3 -> poco_1_10 -> out_stage_3 [arrowhead=none];
+        in_stage_3 -> zlib_1_2_11 -> out_stage_3 [arrowhead=none];
+        in_stage_3 -> recipe_x -> out_stage_3 [arrowhead=none];
+
+        # Next step: Hooks
+        in_stage_hooks [style=invisible,fixedsize=true,width=0,height=0];
+        out_stage_hooks [style=invisible,fixedsize=true,width=0,height=0];
+
+        subgraph cluster_stage_hooks {
+            label = "Hooks";
+            rank = same;
+            win_hooks;
+            mac_hooks;
+            linux_hooks;
+        }
+        
+        out_stage_3 -> in_stage_hooks [arrowhead=none];
+        in_stage_hooks -> win_hooks -> out_stage_hooks [arrowhead=none];
+        in_stage_hooks -> mac_hooks -> out_stage_hooks [arrowhead=none];
+        in_stage_hooks -> linux_hooks -> out_stage_hooks [arrowhead=none];
+
+        # Next step: Other tool we don't want to break
+        in_stage_4 [style=invisible,fixedsize=true,width=0,height=0];
+        out_stage_4 [style=invisible,fixedsize=true,width=0,height=0];
+
+        subgraph cluster_stage_4 {
+            label = "Artifactory";
+            rank = same;
+            artifactory_latest;
+            artifactory_x;
+            artifactory_y;
+        }
+        
+        out_stage_hooks -> in_stage_4 [arrowhead=none];
+        in_stage_4 -> artifactory_latest -> out_stage_4 [arrowhead=none];
+        in_stage_4 -> artifactory_x -> out_stage_4 [arrowhead=none];
+        in_stage_4 -> artifactory_y -> out_stage_4 [arrowhead=none];
+
+        # Next step: Plugins
+        in_stage_5 [style=invisible,fixedsize=true,width=0,height=0];
+        out_stage_5 [style=invisible,fixedsize=true,width=0,height=0];
+
+        subgraph cluster_stage_5 {
+            label = "Plugins";
+            rank = same;
+            plugin_vs;
+            plugin_jenkins;
+            plugin_clion;
+        }
+        
+        out_stage_4 -> in_stage_5 [arrowhead=none];
+        in_stage_5 -> plugin_vs -> out_stage_5 [arrowhead=none];
+        in_stage_5 -> plugin_jenkins -> out_stage_5 [arrowhead=none];
+        in_stage_5 -> plugin_clion -> out_stage_5 [arrowhead=none];
+
+        out_stage_5 -> End;
+    }
+}
