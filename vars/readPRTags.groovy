@@ -19,7 +19,7 @@ def call(String branchName, String GH_TOKEN) {
     def getRC = get.getResponseCode();
     println(getRC);
     if(getRC.equals(200)) {
-        List json = new JsonSlurper().parse(get.getInputStream().getText())
+        List json = new JsonSlurper().parseText(get.getInputStream().getText())
         echo json['body']
         //println(get.getInputStream().getText());
     }
