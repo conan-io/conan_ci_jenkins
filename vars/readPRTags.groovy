@@ -15,9 +15,16 @@ def call(String branchName, String GH_TOKEN) {
     String prNumber = branchName.substring(3);
 
     // GET /repos/:owner/:repo/pulls/:pull_number
-    String getResult = new URL("http://api.github.com/repos/conan-io/conan/pulls/${prNumber}").text
-    List json = new JsonSlurper().parseText(getResult)
-    echo json
+    def get = new URL("https://api.github.com/repos/conan-io/conan/pulls/${prNumber}").openConnection();
+    def getRC = get.getResponseCode();
+    println(getRC);
+    if(getRC.equals(200)) {
+        println(get.getInputStream().getText());
+    }
+
+    //String getResult = new URL("https://api.github.com/repos/conan-io/conan/pulls/${prNumber}").text
+    //List json = new JsonSlurper().parseText(getResult)
+    //echo json
 
 
     //URL apiUrl = "https://some.website/api/someFunction".toURL()
