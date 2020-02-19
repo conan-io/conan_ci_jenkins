@@ -41,14 +41,19 @@ jobs:
       
 language: python
 before_install:
-  - |
+  - | # Do not build docker images if they are not modified
     count=`git diff --name-only $TRAVIS_COMMIT_RANGE | sort -u | uniq | grep docker_images | wc -l`
     if [ $count -ne 0 ]
     then
       echo "Build docker images"
     else
-      echo "No docker image to build"
-      travis_terminate 0
+      if [[ "$TRAVIS_BRANCH" =~ "^(staging|master)$" && "${TRAVIS_PULL_REQUEST}" == "false" ]]
+      then
+        echo "Build docker images (branch staging or master)"
+      else
+        echo "No docker image to build"
+        travis_terminate 0
+      fi
     fi
 script:
   - echo "Building docker image '$DOCKER_USERNAME/$IMAGE'"
