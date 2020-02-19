@@ -15,7 +15,7 @@ def call(String branchName, String GH_TOKEN) {
     String prNumber = branchName.substring(3);
 
     // GET /repos/:owner/:repo/pulls/:pull_number
-    String getResult = new URL('http://api.github.com/repos/conan-io/conan/pulls/${prNumber}').text
+    String getResult = new URL("http://api.github.com/repos/conan-io/conan/pulls/${prNumber}").text
     List json = new JsonSlurper().parseText(getResult)
     echo json
 
