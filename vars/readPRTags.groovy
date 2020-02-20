@@ -2,8 +2,8 @@
 import groovy.json.JsonSlurper
 
 
-def call(String branchName, String GH_TOKEN) {
-    echo "conanci::readPRTags(branchName=${branchName}, GH_TOKEN=${GH_TOKEN})"
+def call(String branchName) {
+    echo "conanci::readPRTags(branchName=${branchName})"
 
     final String TAG_PYVERS = "#PYVERS:"
     final String TAG_TAGS = "#TAGS:"
