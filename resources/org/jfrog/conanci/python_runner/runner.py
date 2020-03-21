@@ -39,7 +39,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     debug_traces = ""  # "--debug=nose,nose.result" if platform.system() == "Darwin" and pyver != "py27" else ""
     # pyenv = "/usr/local/bin/python2"
     multiprocess = ("--processes=%s --process-timeout=1000 "
-                    "--process-restartworker --with-coverage" % num_cores) if platform.system() != "Darwin" else ""
+                    "--process-restartworker" % num_cores) if platform.system() != "Darwin" else ""
 
     if num_cores <= 1:
         multiprocess = ""
@@ -65,9 +65,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
               "{multiprocess} " \
               "{debug_traces} " \
               "{traverse_namespace} " \
-              "--with-xunit " \
-              "&& codecov -t f1a9c517-3d81-4213-9f51-61513111fc28".format(
-                                    **{"module_path": module_path,
+              "--with-xunit ".format(**{"module_path": module_path,
                                        "pyenv": pyenv,
                                        "tags_str": tags_str,
                                        "venv_dest": venv_dest,
