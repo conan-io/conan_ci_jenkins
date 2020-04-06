@@ -48,7 +48,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
                    "pip install -r conans/requirements_dev.txt && " \
                    "pip install -r conans/requirements_server.txt && "
 
-    if platform.system() == "Darwin":
+    if platform.system() == "Darwin" and os.path.exists("conans/requirements_osx.txt"):
         pip_installs += "pip install -r conans/requirements_osx.txt && "
 
     traverse_namespace = ""
