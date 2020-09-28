@@ -179,9 +179,9 @@ class TestRunner {
                             if (slaveLabel == "Windows") {
                                 script.bat(script: cmd)
                             } 
-                            //else {
-                            //    script.sh(script: cmd)
-                            //}
+                            else {
+                                script.sh(script: cmd)
+                            }
                         }
                     }
 
