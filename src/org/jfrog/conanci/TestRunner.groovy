@@ -178,9 +178,6 @@ class TestRunner {
                             String cmd = "python -c \"import shutil; shutil.copytree('${escaped_ws}', '${sourcedir}')\"".toString()
                             if (slaveLabel == "Windows") {
                                 script.bat(script: cmd)
-                            } 
-                            else {
-                                script.sh(script: cmd)
                             }
                         }
                     }
