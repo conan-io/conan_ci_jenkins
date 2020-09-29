@@ -73,7 +73,7 @@ class TestRunner {
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
             Map<String, Closure> builders = [:]
-            List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
+            List<String> pyVers = ['py38'] // testLevelConfig.getEffectivePyvers("Linux")
             for (def pyver in pyVers) {
                 String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
                 builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
