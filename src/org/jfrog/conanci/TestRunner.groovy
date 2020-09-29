@@ -188,6 +188,7 @@ class TestRunner {
                         try {
 
                             script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
+                                script.bat(script: "svn help")
                                 script.bat(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
