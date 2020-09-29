@@ -215,7 +215,8 @@ class TestRunner {
                                 script.sh(script: "cp -R ./ ${sourcedir}")
                                 script.sh(script: "chown -R conan ${sourcedir}")
                                 script.sh(script: "su - conan -c \"ls -la ${sourcedir}\"")
-                                script.sh(script: "su - conan -c \"python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}\"")
+                                script.sh(script: "su - conan -c \"cat ${sourcedir}/python_runner/runner.py\"")
+                                script.sh(script: "su - conan -c \"python ${sourcedir}/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}\"")
                             }
                         }
                         finally {
