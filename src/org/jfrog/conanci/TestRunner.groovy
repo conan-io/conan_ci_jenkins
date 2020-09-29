@@ -15,7 +15,7 @@ class TestRunner {
 
 
     void run(){
-        cancelPreviousCommits()
+        //cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
         //runRESTTests()
         script.echo("Branch: ${script.env.BRANCH_NAME}")
