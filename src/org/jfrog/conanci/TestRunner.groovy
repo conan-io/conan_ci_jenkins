@@ -210,7 +210,7 @@ class TestRunner {
                         try {
                             script.sh("docker pull conanio/conantests")
                             script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir}") {
-                                //script.sh(script: "mkdir -p ${sourcedir}")
+                                script.sh(script: "mkdir -p ${sourcedir}")
                                 script.sh(script: "cp -R ./ ${sourcedir}")
                                 script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}")
                             }
