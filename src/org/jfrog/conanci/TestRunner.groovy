@@ -213,6 +213,7 @@ class TestRunner {
                                 script.sh(script: "whoami")
                                 script.sh(script: "mkdir -p ${sourcedir}")
                                 script.sh(script: "cp -R ./ ${sourcedir}")
+                                script.sh(script: "chown -R conan:conan ${sourcedir}")
                                 script.sh(script: "su - conan -c \"ls -la ${sourcedir}\"")
                                 script.sh(script: "su - conan -c \"python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}\"")
                             }
