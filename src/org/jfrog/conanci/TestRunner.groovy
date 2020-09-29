@@ -15,9 +15,9 @@ class TestRunner {
 
 
     void run(){
-        //cancelPreviousCommits()
+        cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
-        //runRESTTests()
+        runRESTTests()
         script.echo("Branch: ${script.env.BRANCH_NAME}")
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
@@ -66,14 +66,14 @@ class TestRunner {
 
 
     void runRegularBuildTests(){
-        String testModule = "\"conans.test.functional.cache.read_only_test.ReadOnlyTest\""
+        String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
         excludedTags.add("local_bottle")
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
             Map<String, Closure> builders = [:]
-            List<String> pyVers = ['py38'] // testLevelConfig.getEffectivePyvers("Linux")
+            List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
             for (def pyver in pyVers) {
                 String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
                 builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
@@ -210,12 +210,9 @@ class TestRunner {
                         try {
                             script.sh("docker pull conanio/conantests")
                             script.docker.image('conanio/conantests').inside() {
-                                script.sh(script: "whoami")
                                 script.sh(script: "mkdir -p ${sourcedir}")
                                 script.sh(script: "cp -R ./ ${sourcedir}")
                                 script.sh(script: "chown -R conan ${sourcedir}")
-                                script.sh(script: "su - conan -c \"ls -la ${sourcedir}\"")
-                                script.sh(script: "su - conan -c \"cat ${sourcedir}/python_runner/runner.py\"")
                                 script.sh(script: "su - conan -c \"python ${sourcedir}/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}\"")
                             }
                         }
