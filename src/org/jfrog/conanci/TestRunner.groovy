@@ -179,6 +179,9 @@ class TestRunner {
                             if (slaveLabel == "Windows") {
                                 script.bat(script: cmd)
                             }
+                            else if (slaveLabel == "Macos") {
+                                script.sh(script: cmd)
+                            }
                         }
                     }
 
