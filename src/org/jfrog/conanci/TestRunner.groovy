@@ -66,7 +66,7 @@ class TestRunner {
 
 
     void runRegularBuildTests(){
-        String testModule = "\"conans.test\""
+        String testModule = "\"conans.test.functional.cache.read_only_test.ReadOnlyTest\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
         excludedTags.add("local_bottle")
@@ -209,7 +209,7 @@ class TestRunner {
                     else if (slaveLabel == "Linux"){
                         try {
                             script.sh("docker pull conanio/conantests")
-                            script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} --user conan") {
+                            script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -u conan:conan") {
                                 script.sh(script: "whoami")
                                 script.sh(script: "mkdir -p ${sourcedir}")
                                 script.sh(script: "cp -R ./ ${sourcedir}")
