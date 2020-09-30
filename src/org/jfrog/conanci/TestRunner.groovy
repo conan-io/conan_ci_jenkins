@@ -66,7 +66,7 @@ class TestRunner {
 
 
     void runRegularBuildTests(){
-        String testModule = "\"conans.test\""
+        String testModule = "\"conans.test.functional.generators.link_order_test.LinkOrderTest\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
         excludedTags.add("local_bottle")
