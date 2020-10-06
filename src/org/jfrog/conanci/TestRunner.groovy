@@ -17,7 +17,7 @@ class TestRunner {
     void run(){
         cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
-        //runRESTTests()
+        runRESTTests()
         script.echo("Branch: ${script.env.BRANCH_NAME}")
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
@@ -74,13 +74,13 @@ class TestRunner {
             // First (revisions or not) for linux
             Map<String, Closure> builders = [:]
             List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
-            // for (def pyver in pyVers) {
-            //     String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
-            //     builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
-            // }
-            // script.parallel(builders)
+            for (def pyver in pyVers) {
+                String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
+                builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
+            }
+            script.parallel(builders)
 
-            // Seconds (revisions or not) for Mac and windows
+            Seconds (revisions or not) for Mac and windows
             builders = [:]
             for (def slaveLabel in ["Macos", "Windows"]) {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
@@ -191,7 +191,6 @@ class TestRunner {
                         try {
 
                             script.withEnv(["CONAN_TEST_FOLDER=${workdir}"]) {
-                                script.bat(script: "svn help")
                                 script.bat(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
