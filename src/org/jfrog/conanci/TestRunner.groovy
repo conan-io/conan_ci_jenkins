@@ -80,7 +80,7 @@ class TestRunner {
             }
             script.parallel(builders)
 
-            Seconds (revisions or not) for Mac and windows
+            // Seconds (revisions or not) for Mac and windows
             builders = [:]
             for (def slaveLabel in ["Macos", "Windows"]) {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
