@@ -54,7 +54,7 @@ class TestRunner {
         List<String> includedTags = ["rest_api", "local_bottle"]
         String testModule = "\"conans.test\"" 
 
-        slaveLabel = "Windows"
+        def slaveLabel = "Windows"
         List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
         for (def pyver in pyVers) {
             String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
