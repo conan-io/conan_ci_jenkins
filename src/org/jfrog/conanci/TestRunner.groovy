@@ -78,7 +78,7 @@ class TestRunner {
         excludedTags.add("local_bottle")
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
-            // Map<String, Closure> builders = [:]
+            Map<String, Closure> builders = [:]
             // List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
             // for (def pyver in pyVers) {
             //     String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
