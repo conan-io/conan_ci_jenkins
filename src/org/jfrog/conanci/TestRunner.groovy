@@ -17,7 +17,7 @@ class TestRunner {
     void run(){
         cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
-        runRESTTests()
+        //runRESTTests()
         script.echo("Branch: ${script.env.BRANCH_NAME}")
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
@@ -78,13 +78,13 @@ class TestRunner {
         excludedTags.add("local_bottle")
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
-            Map<String, Closure> builders = [:]
-            List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
-            for (def pyver in pyVers) {
-                String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
-                builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
-            }
-            script.parallel(builders)
+            // Map<String, Closure> builders = [:]
+            // List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
+            // for (def pyver in pyVers) {
+            //     String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
+            //     builders[stageLabel] = getTestClosure(testModule, "Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
+            // }
+            // script.parallel(builders)
 
             // Seconds (revisions or not) for Mac and windows
             builders = [:]
