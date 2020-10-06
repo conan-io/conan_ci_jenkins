@@ -58,7 +58,7 @@ class TestRunner {
         List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
         for (def pyver in pyVers) {
             String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
-            script.stage(getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags))
+            getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags).call()
         }
         Map<String, Closure> linuxRestBuilders = [:]
         slaveLabel = "Linux"
