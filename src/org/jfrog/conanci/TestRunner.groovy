@@ -73,7 +73,7 @@ class TestRunner {
 
     void runRegularBuildTests(){
         //String testModule = "\"conans.test\""
-        String testModule = "\"conans.test.functional.command.info.info_folders_test\""
+        String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
         excludedTags.add("local_bottle")
@@ -89,7 +89,8 @@ class TestRunner {
 
             // Seconds (revisions or not) for Mac and windows
             builders = [:]
-            for (def slaveLabel in ["Macos", "Windows"]) {
+            //for (def slaveLabel in ["Macos", "Windows"]) {
+            for (def slaveLabel in ["Macos"]) {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
