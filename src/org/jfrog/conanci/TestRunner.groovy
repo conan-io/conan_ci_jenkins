@@ -60,14 +60,14 @@ class TestRunner {
             String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
             getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags).call()
         }
-        Map<String, Closure> linuxRestBuilders = [:]
-        slaveLabel = "Linux"
-        pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
-        for (def pyver in pyVers) {
-            String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
-            linuxRestBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
-        }
-        script.parallel(linuxRestBuilders)
+        // Map<String, Closure> linuxRestBuilders = [:]
+        // slaveLabel = "Linux"
+        // pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
+        // for (def pyver in pyVers) {
+        //     String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
+        //     linuxRestBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
+        // }
+        // script.parallel(linuxRestBuilders)
     }
 
 
@@ -88,7 +88,7 @@ class TestRunner {
 
             // Seconds (revisions or not) for Mac and windows
             builders = [:]
-            def slaveLabel = "Macos"
+            def slaveLabel = "Windows"
             //for (def slaveLabel in ["Macos", "Windows"]) {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
