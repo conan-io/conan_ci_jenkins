@@ -72,7 +72,7 @@ class TestRunner {
 
 
     void runRegularBuildTests(){
-        String testModule = "\"conans.test.functional.graph.diamond_test.DiamondTest\""
+        String testModule = "\"conans.test\""
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         excludedTags.add("rest_api")
         excludedTags.add("local_bottle")
