@@ -4,13 +4,8 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV PY27 /root/.pyenv/versions/2.7.17/bin/python
-ENV PY35 /root/.pyenv/versions/3.5.9/bin/python
-ENV PY37 /root/.pyenv/versions/3.7.6/bin/python
-ENV PY38 /root/.pyenv/versions/3.8.1/bin/python
-
-ENV CMAKE_3_16_4 /root/conan_packages/.conan/data/cmake/3.16.4/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake
-ENV CMAKE_3_16_3 /root/conan_packages/.conan/data/cmake/3.16.3/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake
+ENV CMAKE_3_7_2 /usr/share/cmake-3.7.2/bin/cmake
+ENV CMAKE_3_16_3 /usr/share/cmake-3.16.3/bin/cmake
 
 ENV GCC_7 /usr/bin/gcc-7
 ENV GXX_7 /usr/bin/g++-7
@@ -22,43 +17,24 @@ ENV CLANGXX_7 /usr/bin/clang++-7
 ENV CLANG_9 /usr/bin/clang-9
 ENV CLANGXX_9 /usr/bin/clang++-9
 
-COPY select_cmake.sh \
-     select_gcc.sh \
-     select_clang.sh \
-     select_alternatives.sh \
-     /root/
-
+WORKDIR /root
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
        sudo ca-certificates \
        # pyenv requires
        make build-essential libssl-dev zlib1g-dev libbz2-dev \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-       xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
-    \
-    # Install pyenv stuff
-    && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
-    && export PATH="/root/.pyenv/bin:$PATH" \
-    && pyenv init - \
-    && pyenv virtualenv-init - \
-    && pyenv update \
-    && pyenv install 3.8.1 \
-    && pyenv install 3.7.6 \
-    && pyenv install 3.5.9 \
-    && pyenv install 2.7.17 \
-    #
-    # Install CMake versions (using Conan) and register alternatives
-    && $PY38 -m venv ./conan_tmp && cd ./conan_tmp \
-    && ./bin/pip install conan \
-    && export CONAN_USER_HOME=/root/conan_packages/ \
-    && ./bin/conan install cmake/3.16.4@ \
-    && ./bin/conan install cmake/3.16.3@ \
-    && ./bin/pip uninstall -y conan \
-    && cd .. && rm -fr ./conan_tmp \
-    #
+       xz-utils tk-dev libffi-dev liblzma-dev python-openssl git wget sudo file \
+       autotools-dev automake linux-libc-dev subversion subversion-tools \
+    # fix: asm/errno.h: No such file or directory
+    && ln -s /usr/include/asm-generic/ /usr/include/asm \
+    # Install CMake versions
+    && wget https://github.com/Kitware/CMake/releases/download/v3.7.2/cmake-3.7.2-Linux-x86_64.tar.gz \
+    && tar -xvzf cmake-3.7.2-Linux-x86_64.tar.gz && mv cmake-3.7.2-Linux-x86_64 /usr/share/cmake-3.7.2  \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.16.3/cmake-3.16.3-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.16.3-Linux-x86_64.tar.gz && mv cmake-3.16.3-Linux-x86_64 /usr/share/cmake-3.16.3 \
     # Alternatives for CMake
-    && chmod +x /root/select_cmake.sh \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_4 10 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_7_2 10 \
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_3 20 \
     #
     # Install compilers: g++ and clang++
@@ -67,23 +43,56 @@ RUN apt-get -qq update \
        g++-9-multilib g++-7-multilib \
     #
     # Alternatives for GCC
-    && chmod +x /root/select_gcc.sh \
     && update-alternatives --install /usr/bin/gcc gcc $GCC_9 10 \
     && update-alternatives --install /usr/bin/gcc gcc $GCC_7 20 \
     && update-alternatives --install /usr/bin/g++ g++ $GXX_9 10 \
     && update-alternatives --install /usr/bin/g++ g++ $GXX_7 20 \
     #
     # Alternatives for Clang
-    && chmod +x /root/select_clang.sh \
     && update-alternatives --install /usr/bin/clang clang $CLANG_9 10 \
     && update-alternatives --install /usr/bin/clang clang $CLANG_7 20 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_9 10 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_7 20 \
-    #
-    && chmod +x /root/select_alternatives.sh \
-    #
     # Clean the image
-    && rm -rf /var/lib/apt/lists
+    && rm -rf /var/lib/apt/lists && rm -rf /root/*.tar.gz
 
-ENTRYPOINT ["/root/select_alternatives.sh" ]
-CMD ["gcc", "9", "clang", "9", "cmake", "3.16.4"]
+RUN useradd -ms /bin/bash conan && echo "conan:conan" | chpasswd && adduser conan sudo
+RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+USER conan
+WORKDIR /home/conan
+ENV PATH /home/conan/.pyenv/shims:/home/conan/.pyenv/bin:$PATH
+RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+    && pyenv init - \
+    && pyenv virtualenv-init - \
+    && pyenv update \
+    && pyenv install 3.8.1 \
+    && pyenv install 3.7.6 \
+    && pyenv install 3.5.9 \
+    && pyenv install 2.7.17
+
+COPY --chown=conan \
+     select_cmake.sh \
+     select_gcc.sh \
+     select_clang.sh \
+     select_alternatives.sh \
+     /home/conan/
+
+RUN chmod +x /home/conan/*.sh
+RUN sudo /home/conan/select_alternatives.sh gcc 9 clang 9 cmake 3.16.3
+
+
+# To run the tests
+# Launch the container:
+#   docker run -it --rm IMAGENAME -vPATH_WITH_CONAN_SOURCES:/home/conan/sources /bin/bash
+# Select the python version:
+#   pyenv global 3.8.1
+# Upgrade pip (recommended):
+#    pip install --upgrade pip
+# Install requirements:
+#    pip install -r source/conans/requirements.txt
+#    pip install -r source/conans/requirements_dev.txt
+#    pip install -r source/conans/requirements_server.txt
+# Prepare PYTHONPATH:
+#   export PYTHONPATH=$(pwd)
+# Run pytest:
+#   cd source && pytest

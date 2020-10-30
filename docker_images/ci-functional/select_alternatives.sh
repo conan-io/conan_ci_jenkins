@@ -7,9 +7,9 @@ if [[ $1 != gcc || $3 != clang || $5 != cmake ]]; then
     exit 1
 fi
 
-/root/select_gcc.sh $2
-/root/select_clang.sh $4
-/root/select_cmake.sh $6
+/home/conan/select_gcc.sh $2
+/home/conan/select_clang.sh $4
+/home/conan/select_cmake.sh $6
 
 # Pass the rest of the arguments to /bin/bash
 all_args=("$@")
