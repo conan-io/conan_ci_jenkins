@@ -2,6 +2,11 @@ FROM ubuntu:eoan
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
+ENV PY27 /home/conan/.pyenv/versions/2.7.17/bin/python
+ENV PY35 /home/conan/.pyenv/versions/3.5.9/bin/python
+ENV PY37 /home/conan/.pyenv/versions/3.7.6/bin/python
+ENV PY38 /home/conan/.pyenv/versions/3.8.1/bin/python
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -qq update \
@@ -33,19 +38,3 @@ ENTRYPOINT ["/bin/bash"]
 
 USER conan
 WORKDIR /home/conan
-
-# To run the tests
-# Launch the container:
-#   docker run -it --rm IMAGENAME -vPATH_WITH_CONAN_SOURCES:/home/conan/sources /bin/bash
-# Select the python version:
-#   pyenv global 3.8.1
-# Upgrade pip (recommended):
-#    pip install --upgrade pip
-# Install requirements:
-#    pip install -r source/conans/requirements.txt
-#    pip install -r source/conans/requirements_dev.txt
-#    pip install -r source/conans/requirements_server.txt
-# Prepare PYTHONPATH:
-#   export PYTHONPATH=$(pwd)
-# Run pytest:
-#   cd source && pytest
