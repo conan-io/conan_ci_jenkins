@@ -8,7 +8,7 @@ from parameterized import parameterized
 class CMakeTestCase(unittest.TestCase):
     """ Check CMake versions exist and work"""
 
-    @parameterized.expand([("CMAKE_2_8_12", "2.8.12"),
+    @parameterized.expand([("CMAKE_2_8_12", "2.8.12.2"),
                            ("CMAKE_3_7_2", "3.7.2"),
                            ("CMAKE_3_18_4", "3.18.4"),])
     def test_versions(self, envvar, version):
