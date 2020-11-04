@@ -6,4 +6,4 @@ if [ -z "$1" ]; then
 fi
 
 echo "Set CMake version $1" 1>&2
-update-alternatives --set cmake "/root/conan_packages/.conan/data/cmake/$1/_/_/package/44fcf6b9a7fb86b2586303e3db40189d3b511830/bin/cmake"
+update-alternatives --set cmake "/usr/share/cmake-$1/bin/cmake"

@@ -1,9 +1,7 @@
 import os
-import re
 import subprocess
 import unittest
 
-from packaging.version import VERSION_PATTERN, parse
 from parameterized import parameterized
 
 clangxx_7 = os.environ.get("CLANGXX_7", None)
