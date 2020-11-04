@@ -97,3 +97,6 @@ COPY --chown=conan \
 
 RUN chmod +x /home/conan/*.sh
 RUN sudo /home/conan/select_alternatives.sh gcc 9 clang 9 cmake 3.16.9
+
+ENTRYPOINT ["/home/conan/select_alternatives.sh" ]
+CMD ["gcc", "9", "clang", "9", "cmake", "3.18.4"]
