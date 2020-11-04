@@ -1,11 +1,8 @@
 import os
-import re
 import subprocess
 import unittest
 
-from packaging.version import VERSION_PATTERN, parse
 from parameterized import parameterized
-
 
 gxx_7 = os.environ.get("GXX_7", None)
 gcc_7 = os.environ.get("GCC_7", None)

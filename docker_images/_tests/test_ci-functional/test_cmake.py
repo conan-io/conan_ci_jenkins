@@ -1,17 +1,16 @@
 import os
-import re
 import subprocess
 import unittest
 
-from packaging.version import VERSION_PATTERN, parse
 from parameterized import parameterized
 
 
 class CMakeTestCase(unittest.TestCase):
     """ Check CMake versions exist and work"""
 
-    @parameterized.expand([("CMAKE_3_16_4", "3.16.4"),
-                           ("CMAKE_3_16_3", "3.16.3"),])
+    @parameterized.expand([("CMAKE_2_8_12", "2.8.12"),
+                           ("CMAKE_3_7_2", "3.7.2"),
+                           ("CMAKE_3_18_4", "3.18.4"),])
     def test_versions(self, envvar, version):
         cmake_bin = os.environ[envvar]
         out, _ = subprocess.Popen([cmake_bin, '--version'], stdout=subprocess.PIPE, shell=False).communicate()

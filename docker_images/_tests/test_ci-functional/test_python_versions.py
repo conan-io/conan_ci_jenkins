@@ -3,7 +3,7 @@ import re
 import subprocess
 import unittest
 
-from packaging.version import VERSION_PATTERN, parse
+from packaging.version import parse
 from parameterized import parameterized
 
 

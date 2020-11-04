@@ -9,8 +9,10 @@ ENV PY35 /home/conan/.pyenv/versions/3.5.9/bin/python
 ENV PY37 /home/conan/.pyenv/versions/3.7.6/bin/python
 ENV PY38 /home/conan/.pyenv/versions/3.8.1/bin/python
 
+ENV CMAKE_2_8_12 /usr/share/cmake-2.8.12/bin/cmake
 ENV CMAKE_3_7_2 /usr/share/cmake-3.7.2/bin/cmake
-ENV CMAKE_3_16_3 /usr/share/cmake-3.16.3/bin/cmake
+ENV CMAKE_3_16_9 /usr/share/cmake-3.16.9/bin/cmake
+ENV CMAKE_3_18_4 /usr/share/cmake-3.18.4/bin/cmake
 
 ENV GCC_7 /usr/bin/gcc-7
 ENV GXX_7 /usr/bin/g++-7
@@ -33,14 +35,25 @@ RUN apt-get -qq update \
        autotools-dev automake linux-libc-dev subversion subversion-tools \
     # fix: asm/errno.h: No such file or directory
     && ln -s /usr/include/asm-generic/ /usr/include/asm \
+
     # Install CMake versions
+    && wget https://cmake.org/files/v2.8/cmake-2.8.12.2-Linux-i386.tar.gz   \
+    && tar -xvzf cmake-2.8.12.2-Linux-i386.tar.gz && mv cmake-2.8.12.2-Linux-i386 /usr/share/cmake-2.8.12 \
+
     && wget https://github.com/Kitware/CMake/releases/download/v3.7.2/cmake-3.7.2-Linux-x86_64.tar.gz \
     && tar -xvzf cmake-3.7.2-Linux-x86_64.tar.gz && mv cmake-3.7.2-Linux-x86_64 /usr/share/cmake-3.7.2  \
-    && wget https://github.com/Kitware/CMake/releases/download/v3.16.3/cmake-3.16.3-Linux-x86_64.tar.gz   \
-    && tar -xvzf cmake-3.16.3-Linux-x86_64.tar.gz && mv cmake-3.16.3-Linux-x86_64 /usr/share/cmake-3.16.3 \
+
+    && wget https://github.com/Kitware/CMake/releases/download/v3.16.9/cmake-3.16.9-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.16.9-Linux-x86_64.tar.gz && mv cmake-3.16.9-Linux-x86_64 /usr/share/cmake-3.16.9 \
+
+    && wget https://github.com/Kitware/CMake/releases/download/v3.18.4/cmake-3.18.4-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.18.4-Linux-x86_64.tar.gz && mv cmake-3.18.4-Linux-x86_64 /usr/share/cmake-3.18.4 \
+
     # Alternatives for CMake
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_2_8_12 10 \
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_7_2 10 \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_3 20 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_9 20 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_18_4 30 \
     #
     # Install compilers: g++ and clang++
     && apt-get -qq install -y --no-install-recommends \
@@ -83,7 +96,7 @@ COPY --chown=conan \
      /home/conan/
 
 RUN chmod +x /home/conan/*.sh
-RUN sudo /home/conan/select_alternatives.sh gcc 9 clang 9 cmake 3.16.3
+RUN sudo /home/conan/select_alternatives.sh gcc 9 clang 9 cmake 3.16.9
 
 ENTRYPOINT ["sudo", "/home/conan/select_alternatives.sh" ]
-CMD ["gcc", "9", "clang", "9", "cmake", "3.16.3"]
+CMD ["gcc", "9", "clang", "9", "cmake", "3.18.4"]
