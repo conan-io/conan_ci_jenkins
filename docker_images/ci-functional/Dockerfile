@@ -51,9 +51,9 @@ RUN apt-get -qq update \
 
     # Alternatives for CMake
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_2_8_12 10 \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_7_2 10 \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_9 20 \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_18_4 30 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_7_2 20 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_9 30 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_18_4 40 \
     #
     # Install compilers: g++ and clang++
     && apt-get -qq install -y --no-install-recommends \
@@ -97,6 +97,3 @@ COPY --chown=conan \
 
 RUN chmod +x /home/conan/*.sh
 RUN sudo /home/conan/select_alternatives.sh gcc 9 clang 9 cmake 3.16.9
-
-ENTRYPOINT ["sudo", "/home/conan/select_alternatives.sh" ]
-CMD ["gcc", "9", "clang", "9", "cmake", "3.18.4"]
