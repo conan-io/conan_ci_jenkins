@@ -88,7 +88,7 @@ class TestRunner {
 
             // Seconds (revisions or not) for Mac and windows
             builders = [:]
-            def slaveLabel = "Windows"
+            def slaveLabel = "Macos"
             //for (def slaveLabel in ["Macos", "Windows"]) {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
