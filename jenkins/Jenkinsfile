@@ -1,0 +1,18 @@
+node("Linux") {
+    stage("Checkout the sources") {
+        checkout scm
+    }
+    stage("Test") {
+        docker.image("gradle:6.7.0").inside() {
+            sh(script: "apt-get update && apt-get install -y python3 python3-pip")
+            stage("Python tests") {
+                sh(script: "cd resources/org/jfrog/conanci && python -m unittest python_runner/tests/runner_test.py")
+            }
+            stage("Groovy tests") {
+                sh(script: "./gradlew assemble && ./gradlew test")
+            }
+        }
+    }
+    stage("Check if conantests image has to be built") {
+    }
+}
