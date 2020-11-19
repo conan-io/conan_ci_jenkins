@@ -52,16 +52,21 @@ class TestRunner {
     void runRESTTests(){
         List<String> excludedTags = []
         List<String> includedTags = ["rest_api", "local_bottle"]
-        String testModule = "\"conans.test\""
-        Map<String, Closure> restBuilders = [:]
-        for (slaveLabel in ["Windows", "Linux"]) {
-            List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
-            for (def pyver in pyVers) {
-                String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
-                restBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
-            }
+        String testModule = "\"conans.test\"" 
+        def slaveLabel = "Windows"
+        List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
+        for (def pyver in pyVers) {
+            String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
+            getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags).call()
         }
-        script.parallel(restBuilders)
+        Map<String, Closure> linuxRestBuilders = [:]
+        slaveLabel = "Linux"
+        pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
+        for (def pyver in pyVers) {
+            String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
+            linuxRestBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
+        }
+        script.parallel(linuxRestBuilders)
     }
 
 
@@ -178,7 +183,8 @@ class TestRunner {
                             String cmd = "python -c \"import shutil; shutil.copytree('${escaped_ws}', '${sourcedir}')\"".toString()
                             if (slaveLabel == "Windows") {
                                 script.bat(script: cmd)
-                            } else {
+                            }
+                            else if (slaveLabel == "Macos") {
                                 script.sh(script: cmd)
                             }
                         }
@@ -211,8 +217,11 @@ class TestRunner {
                     else if (slaveLabel == "Linux"){
                         try {
                             script.sh("docker pull conanio/conantests")
-                            script.docker.image('conanio/conantests').inside("-e CONAN_USER_HOME=${sourcedir} -v${sourcedir}:${sourcedir}") {
-                                script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}")
+                            script.docker.image('conanio/conantests').inside() {
+                                script.sh(script: "mkdir -p ${sourcedir}")
+                                script.sh(script: "cp -R ./ ${sourcedir}")
+                                script.sh(script: "chown -R conan ${sourcedir}")
+                                script.sh(script: "su - conan -c \"python ${sourcedir}/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}\"")
                             }
                         }
                         finally {
