@@ -33,7 +33,7 @@ class TestLevelConfig {
     private void readPRTags(){
         script.node("Linux"){
             script.stage("Check PR tags"){
-                script.withCredentials([script.string(credentialsId: 'GH_TOKEN', variable: 'GH_TOKEN')]) {
+                script.withCredentials([script.usernamePassword(credentialsId: 'conanci-gh-token', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
                     script.checkout(script.scm)
                     script.sh("docker pull conanio/conantests")
                     script.docker.image('conanio/conantests').inside("-e GH_TOKEN=${script.GH_TOKEN}"){
