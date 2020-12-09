@@ -108,6 +108,7 @@ class TestRunner {
                 script.checkout script.scm
                 script.withCredentials([script.string(credentialsId: 'TWINE_USERNAME', variable: 'TWINE_USERNAME'),
                                         script.string(credentialsId: 'TWINE_PASSWORD', variable: 'TWINE_PASSWORD')]) {
+                    script.sh(script: "pip install twine")
                     script.sh(script: "python .ci/bump_dev_version.py")
                     script.sh(script: "rm -rf dist/ && python setup.py sdist")
                     script.sh(script: "python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*")
