@@ -52,7 +52,7 @@ class TestRunner {
     void runRESTTests(){
         List<String> excludedTags = []
         List<String> includedTags = ["rest_api", "local_bottle"]
-        String testModule = "\"conans.test\"" 
+        String testModule = "\"conans/test\"" 
         def slaveLabel = "Windows"
         List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
         for (def pyver in pyVers) {
