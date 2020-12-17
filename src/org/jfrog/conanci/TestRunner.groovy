@@ -53,20 +53,16 @@ class TestRunner {
         List<String> excludedTags = []
         List<String> includedTags = ["rest_api", "local_bottle"]
         String testModule = "\"conans.test\"" 
-        def slaveLabel = "Windows"
-        List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
-        for (def pyver in pyVers) {
-            String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
-            getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags).call()
+        def slaveLabels = ["Windows", "Linux"]
+        Map<String, Closure> parallelRestBuilders = [:]
+        for (def slaveLabel in slaveLabels) {
+            List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
+            for (def pyver in pyVers) {
+                String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
+                parallelRestBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
+            }
         }
-        Map<String, Closure> linuxRestBuilders = [:]
-        slaveLabel = "Linux"
-        pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
-        for (def pyver in pyVers) {
-            String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
-            linuxRestBuilders[stageLabel] = getTestClosure(testModule, slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
-        }
-        script.parallel(linuxRestBuilders)
+        script.parallel(parallelRestBuilders)
     }
 
 
