@@ -27,22 +27,16 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     if excluded_tags:
         for tag in excluded_tags:
             tags_str.append("not {}".format(tag))
-        tags_str = '-A "%s"' % " and ".join(tags_str)
+        tags_str = '-m "%s"' % " and ".join(tags_str)
     if include_tags:
         for tag in include_tags:
             tags_str.append("{}".format(tag))
-        tags_str = '-A "%s"' % " or ".join(tags_str)
+        tags_str = '-m "%s"' % " or ".join(tags_str)
 
     pyenv = pylocations[pyver]
     source_cmd = "." if platform.system() != "Windows" else ""
-    # Prevent OSX to lock when no output is received
-    debug_traces = ""  # "--debug=nose,nose.result" if platform.system() == "Darwin" and pyver != "py27" else ""
-    # pyenv = "/usr/local/bin/python2"
-    multiprocess = ("--processes=%s --process-timeout=1000 "
-                    "--process-restartworker" % num_cores) if platform.system() != "Darwin" else ""
 
-    if num_cores <= 1:
-        multiprocess = ""
+    multiprocess = "-n=%s" % num_cores if num_cores > 1 else ""
 
     pip_installs = "pip install -r conans/requirements.txt && " \
                    "pip install -r conans/requirements_dev.txt && " \
@@ -51,31 +45,22 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     if platform.system() == "Darwin" and os.path.exists("conans/requirements_osx.txt"):
         pip_installs += "pip install -r conans/requirements_osx.txt && "
 
-    traverse_namespace = ""
-    if platform.system() == "Windows" and pyver == "py38":
-        traverse_namespace = "--traverse-namespace"
-
     #  --nocapture
     command = "virtualenv --python \"{pyenv}\" \"{venv_dest}\" && " \
               "{source_cmd} \"{venv_exe}\" && " \
               "{pip_installs} " \
               "python setup.py install && " \
               "conan --version && conan --help && " \
-              "nosetests {module_path} {tags_str} --verbosity={verbosity} " \
-              "{multiprocess} " \
-              "{debug_traces} " \
-              "{traverse_namespace} " \
-              "--with-xunit ".format(**{"module_path": module_path,
-                                       "pyenv": pyenv,
-                                       "tags_str": tags_str,
-                                       "venv_dest": venv_dest,
-                                       "verbosity": verbosity,
-                                       "venv_exe": venv_exe,
-                                       "source_cmd": source_cmd,
-                                       "debug_traces": debug_traces,
-                                       "traverse_namespace": traverse_namespace,
-                                       "multiprocess": multiprocess,
-                                       "pip_installs": pip_installs})
+              "pytest {module_path} {tags_str} " \
+              "{multiprocess} ".format(**{"module_path": module_path,
+                                          "pyenv": pyenv,
+                                          "tags_str": tags_str,
+                                          "venv_dest": venv_dest,
+                                          "verbosity": verbosity,
+                                          "venv_exe": venv_exe,
+                                          "source_cmd": source_cmd,
+                                          "multiprocess": multiprocess,
+                                          "pip_installs": pip_installs})
 
     env = get_environ(tmp_folder)
     env["PYTHONPATH"] = source_folder
