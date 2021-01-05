@@ -13,7 +13,7 @@ node("Linux") {
             }
         }
     }
-    stage("Check if conantests image has to be built") {
+    stage("Check if docker images have to be built") {
         def linter = env.LINT_CONANTESTS ? true : false
         def target_branch = env.BRANCH_NAME.startsWith('PR') ? "${env.CHANGE_TARGET}" : "${env.BRANCH_NAME}"
         def current_commit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
