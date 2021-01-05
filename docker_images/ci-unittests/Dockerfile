@@ -2,12 +2,12 @@ FROM ubuntu:focal
 
 LABEL maintainer="Conan.io <info@conan.io>"
 
-ENV PY27 /root/.pyenv/versions/2.7.17/bin/python
-ENV PY35 /root/.pyenv/versions/3.5.9/bin/python
-ENV PY37 /root/.pyenv/versions/3.7.6/bin/python
-ENV PY38 /root/.pyenv/versions/3.8.1/bin/python
-
 ARG DEBIAN_FRONTEND=noninteractive
+
+ENV PY27 /home/conan/.pyenv/versions/2.7.17/bin/python
+ENV PY35 /home/conan/.pyenv/versions/3.5.9/bin/python
+ENV PY37 /home/conan/.pyenv/versions/3.7.6/bin/python
+ENV PY38 /home/conan/.pyenv/versions/3.8.1/bin/python
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
@@ -17,7 +17,10 @@ RUN apt-get -qq update \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
        xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
 
-ENV PATH /root/.pyenv/shims:/root/.pyenv/bin:$PATH
+RUN useradd -ms /bin/bash conan
+USER conan
+WORKDIR /home/conan
+ENV PATH /home/conan/.pyenv/shims:/home/conan/.pyenv/bin:$PATH
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && pyenv init - \
     && pyenv virtualenv-init - \
@@ -28,6 +31,10 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv install 2.7.17
 
 # Remove not needed things
+USER root
 RUN apt-get -qq remove make build-essential git gcc \
     && rm -rf /var/lib/apt/lists
 ENTRYPOINT ["/bin/bash"]
+
+USER conan
+WORKDIR /home/conan
