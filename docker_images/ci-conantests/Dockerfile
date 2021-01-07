@@ -50,10 +50,8 @@ RUN pip install "virtualenv<20.0.0" \
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
-COPY install-openjdk-ppa.sh /tmp/install-openjdk-ppa.sh
 
-RUN /tmp/install-openjdk-ppa.sh \
-    && apt-get -qq update \
+RUN apt-get -qq update \
     && apt-get -q install -y openjdk-8-jre-headless curl \
     && apt-get -q clean -y \
     && rm -rf /var/lib/apt/lists/* \
