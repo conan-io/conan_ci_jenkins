@@ -23,7 +23,10 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv virtualenv-init - \
     && pyenv update \
     && pyenv install 3.8.1 \
-    && pyenv global 3.8.1
+    && pip install "virtualenv<20.0.0" \
+    && pip install tox \
+    && pip install tox-venv \
+    && pip install requests
 
 USER root
 
@@ -44,8 +47,7 @@ RUN curl -kfsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && systemctl enable docker \
     && pip install docker-compose
 
-RUN pip install "virtualenv<20.0.0" \
-    && pip install PyGithub \
+RUN pip install PyGithub \
     && pip install meson
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
