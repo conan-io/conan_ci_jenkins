@@ -23,6 +23,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv virtualenv-init - \
     && pyenv update \
     && pyenv install 3.8.1 \
+    && pyenv global 3.8.1 \
     && pip install "virtualenv<20.0.0" \
     && pip install tox \
     && pip install tox-venv \
