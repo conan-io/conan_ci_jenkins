@@ -200,7 +200,7 @@ class TestRunner {
                         }
                     } else if (slaveLabel == "Macos") {
                         try {
-                            script.withEnv(['PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin']) {
+                            script.withEnv(["PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin", "CONAN_TEST_FOLDER=${workdir}"]) {
                                 script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
