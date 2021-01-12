@@ -3,6 +3,7 @@ FROM ubuntu:focal
 LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG AGENT_VERSION=3.27
 
 ENV PY38 /home/conan/.pyenv/versions/3.8.1/bin/python
 
