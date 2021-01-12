@@ -15,11 +15,19 @@ node("Linux") {
     }
     stage("Check if docker images have to be built") {
         def linter = env.LINT_CONANTESTS ? true : false
-        def target_branch = env.BRANCH_NAME.startsWith('PR') ? "${env.CHANGE_TARGET}" : "${env.BRANCH_NAME}"
+        def current_branch = env.BRANCH_NAME
+        def target_branch = current_branch.startsWith('PR') ? "${env.CHANGE_TARGET}" : "${env.BRANCH_NAME}"
         def current_commit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
-        sh(script: "git checkout ${target_branch}")
-        def previous_commit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
-        sh(script: "git checkout ${current_commit}")
+        def previous_commit = null
+        if (current_branch!="master") {
+            sh(script: "git checkout ${target_branch}")
+            previous_commit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+            sh(script: "git checkout ${current_commit}")
+        }
+        else {
+            previous_commit = sh(script: "git rev-parse HEAD^1", returnStdout: true).trim()
+        }        
+        
         List<String> images = ["ci-unittests", "ci-functional", "ci-conantests"]
         for (def image_name in images) {
             def count = sh(script: "git diff --name-only ${previous_commit}..${current_commit} | sort -u | uniq | grep docker_images/${image_name} | wc -l", returnStdout: true).trim() as int
