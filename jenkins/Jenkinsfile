@@ -24,7 +24,7 @@ node("Linux") {
             // It was a merge-commit, there is another ancestor!
             pr_head_commit = parent_commits[1]
         }
-        String prevCommit = pr_head_commit ? pr_head_commit : master_commit
+        String prev_commit = pr_head_commit ? pr_head_commit : master_commit
         List<String> images = ["ci-unittests", "ci-functional", "ci-conantests"]
         for (def image_name in images) {
             def count = sh(script: "git diff --name-only ${prev_commit}..${master_head} | sort -u | uniq | grep docker_images/${image_name} | wc -l", returnStdout: true).trim() as int
