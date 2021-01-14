@@ -4,10 +4,10 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV PY27 /home/conan/.pyenv/versions/2.7.17/bin/python
-ENV PY35 /home/conan/.pyenv/versions/3.5.9/bin/python
-ENV PY37 /home/conan/.pyenv/versions/3.7.6/bin/python
-ENV PY38 /home/conan/.pyenv/versions/3.8.1/bin/python
+ENV PY27 /home/conan/.pyenv/versions/2.7.18/bin/python
+ENV PY36 /home/conan/.pyenv/versions/3.6.12/bin/python
+ENV PY38 /home/conan/.pyenv/versions/3.8.6/bin/python
+ENV PY39 /home/conan/.pyenv/versions/3.9.0/bin/python
 
 ENV CMAKE_2_8_12 /usr/share/cmake-2.8.12/bin/cmake
 ENV CMAKE_3_7_2 /usr/share/cmake-3.7.2/bin/cmake
@@ -83,10 +83,10 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv init - \
     && pyenv virtualenv-init - \
     && pyenv update \
-    && pyenv install 3.8.1 \
-    && pyenv install 3.7.6 \
-    && pyenv install 3.5.9 \
-    && pyenv install 2.7.17
+    && pyenv install 3.9.0 \
+    && pyenv install 3.8.6 \
+    && pyenv install 3.6.12 \
+    && pyenv install 2.7.18
 
 COPY --chown=conan \
      select_cmake.sh \
