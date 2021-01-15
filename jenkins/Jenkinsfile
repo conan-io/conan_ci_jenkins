@@ -1,4 +1,4 @@
-def buildDockerClosure(String image_name) {
+def buildDockerClosure(String image_name, boolean linter) {
     return {
         echo "Building docker image 'conanio/${image_name}'"
         if (linter) {
