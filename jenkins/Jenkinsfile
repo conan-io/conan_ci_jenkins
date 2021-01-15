@@ -56,7 +56,7 @@ node("Linux") {
         for (def image_name in images) {
             def count = sh(script: "git diff --name-only ${previous_commit}..${current_commit} | sort -u | uniq | grep docker_images/${image_name} | wc -l", returnStdout: true).trim() as int
             if (count>0) {
-                parallelDockerBuilds["Build 'conanio/${image_name}'"] = buildDockerClosure(image_name)
+                parallelDockerBuilds["Build 'conanio/${image_name}'"] = buildDockerClosure(image_name, linter)
             }
         }
         parallel(parallelDockerBuilds)
