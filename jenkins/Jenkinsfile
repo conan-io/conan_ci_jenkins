@@ -8,7 +8,6 @@ def buildDockerClosure(String image_name, boolean linter) {
         }
         stage("Building 'conanio/${image_name}'") {
             sh(script: "docker build -t conanio/${image_name} docker_images/${image_name}")
-            sh(script: "docker images")
         }
         if (env.BRANCH_NAME=="master") {
             stage("Push 'conanio/${image_name}'") {
