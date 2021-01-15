@@ -1,3 +1,25 @@
+def buildDockerClosure(String image_name, boolean linter) {
+    return {
+        echo "Building docker image 'conanio/${image_name}'"
+        if (linter) {
+            stage("Linting the image") {
+                sh(script: "docker run --rm -i hadolint/hadolint < docker_images/${image_name}/Dockerfile")
+            }
+        }
+        stage("Building 'conanio/${image_name}'") {
+            sh(script: "docker build -t conanio/${image_name} docker_images/${image_name}")
+        }
+        if (env.BRANCH_NAME=="master") {
+            stage("Push 'conanio/${image_name}'") {
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh(script: "echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin;")
+                    sh(script: "docker push conanio/${image_name}")
+                }
+            }
+        }
+    }
+}
+
 node("Linux") {
     stage("Checkout the sources") {
         checkout scm
@@ -29,28 +51,13 @@ node("Linux") {
         }        
         
         List<String> images = ["ci-unittests", "ci-functional", "ci-conantests"]
+        def parallelDockerBuilds = [:]
         for (def image_name in images) {
             def count = sh(script: "git diff --name-only ${previous_commit}..${current_commit} | sort -u | uniq | grep docker_images/${image_name} | wc -l", returnStdout: true).trim() as int
             if (count>0) {
-                echo "Building docker image 'conanio/${image_name}'"
-                if (linter) {
-                    stage("Linting the image") {
-                        sh(script: "docker run --rm -i hadolint/hadolint < docker_images/${image_name}/Dockerfile")
-                    }
-                }
-                stage("Building 'conanio/${image_name}'") {
-                    sh(script: "docker build -t conanio/${image_name} docker_images/${image_name}")
-                    sh(script: "docker images")
-                }
-                if (env.BRANCH_NAME=="master") {
-                    stage("Push 'conanio/${image_name}'") {
-                        withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                            sh(script: "echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin;")
-                            sh(script: "docker push conanio/${image_name}")
-                        }
-                    }
-                }
+                parallelDockerBuilds["Build 'conanio/${image_name}'"] = buildDockerClosure(image_name, linter)
             }
         }
+        parallel(parallelDockerBuilds)
     }
 }
