@@ -4,10 +4,10 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV PY27 /home/conan/.pyenv/versions/2.7.18/bin/python
-ENV PY36 /home/conan/.pyenv/versions/3.6.12/bin/python
-ENV PY38 /home/conan/.pyenv/versions/3.8.6/bin/python
-ENV PY39 /home/conan/.pyenv/versions/3.9.0/bin/python
+ENV PY27 2.7.18
+ENV PY36 3.6.12
+ENV PY38 3.8.6
+ENV PY39 3.9.0
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
@@ -25,10 +25,10 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv init - \
     && pyenv virtualenv-init - \
     && pyenv update \
-    && pyenv install 3.9.0 \
-    && pyenv install 3.8.6 \
-    && pyenv install 3.6.12 \
-    && pyenv install 2.7.18
+    && pyenv install $PY39 \
+    && pyenv install $PY38 \
+    && pyenv install $PY36 \
+    && pyenv install $PY27
 
 # Remove not needed things
 USER root
