@@ -50,7 +50,7 @@ node("Linux") {
             previous_commit = sh(script: "git rev-parse HEAD^1", returnStdout: true).trim()
         }        
         
-        List<String> images = ["ci-unittests", "ci-functional", "ci-conantests"]
+        List<String> images = ["ci-unittests", "ci-functional", "ci-conantests", "conantests"]
         def parallelDockerBuilds = [:]
         for (def image_name in images) {
             def count = sh(script: "git diff --name-only ${previous_commit}..${current_commit} | sort -u | uniq | grep docker_images/${image_name} | wc -l", returnStdout: true).trim() as int

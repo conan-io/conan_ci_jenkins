@@ -14,11 +14,10 @@ macpylocation = {"py27": "/Users/jenkins/.pyenv/versions/2.7.17/bin/python",
                  "py37": "/Users/jenkins/.pyenv/versions/3.7.6/bin/python",
                  "py38": "/Users/jenkins/.pyenv/versions/3.8.1/bin/python",}
 
-linuxpylocation = {"py27": "/usr/bin/python2.7",
-                   "py34": "/usr/bin/python3.4",
-                   "py36": "/usr/bin/python3.6",
-                   "py37": "/usr/bin/python3.7",
-                   "py38": "/usr/bin/python3.8"}
+linuxpylocation = {"py27": "/opt/pyenv/versions/2.7.16/bin",
+                   "py36": "/opt/pyenv/versions/3.6.9/bin",
+                   "py37": "/opt/pyenv/versions/3.7.5/bin",
+                   "py38": "/opt/pyenv/versions/3.8.1/bin"}
 
 win_msbuilds_logs_folder = "D:\\J\\msbuild_logs"
 
