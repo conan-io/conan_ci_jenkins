@@ -11,6 +11,18 @@ RUN sudo apt-get update \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.1 \
     && pyenv global 3.8.1 \
     && python -m pip install --upgrade pip "virtualenv<20.0.0" PyGithub conan meson
+    # Install CMake versions
+
+USER root
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.15.7/cmake-3.15.7-Linux-x86_64.tar.gz \
+    && tar -xvzf cmake-3.15.7-Linux-x86_64.tar.gz && mv cmake-3.15.7-Linux-x86_64 /usr/share/cmake-3.15.7  \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.16.9/cmake-3.16.9-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.16.9-Linux-x86_64.tar.gz && mv cmake-3.16.9-Linux-x86_64 /usr/share/cmake-3.16.9 \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.17.5/cmake-3.17.5-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.17.5-Linux-x86_64.tar.gz && mv cmake-3.17.5-Linux-x86_64 /usr/share/cmake-3.17.5 \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.19.7/cmake-3.19.7-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.19.7-Linux-x86_64.tar.gz && mv cmake-3.19.7-Linux-x86_64 /usr/share/cmake-3.19.7
 
 USER conan
 WORKDIR /home/conan
