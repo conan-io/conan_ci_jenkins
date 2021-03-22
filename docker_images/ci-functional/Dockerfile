@@ -9,10 +9,10 @@ ENV PY36 3.6.12
 ENV PY38 3.8.6
 ENV PY39 3.9.0
 
-ENV CMAKE_2_8_12 /usr/share/cmake-2.8.12/bin/cmake
-ENV CMAKE_3_7_2 /usr/share/cmake-3.7.2/bin/cmake
 ENV CMAKE_3_15_7 /usr/share/cmake-3.15.7/bin/cmake
-ENV CMAKE_3_19_2 /usr/share/cmake-3.19.2/bin/cmake
+ENV CMAKE_3_16_9 /usr/share/cmake-3.16.9/bin/cmake
+ENV CMAKE_3_17_5 /usr/share/cmake-3.17.5/bin/cmake
+ENV CMAKE_3_19_7 /usr/share/cmake-3.19.7/bin/cmake
 
 ENV GCC_7 /usr/bin/gcc-7
 ENV GXX_7 /usr/bin/g++-7
@@ -37,23 +37,19 @@ RUN apt-get -qq update \
     && ln -s /usr/include/asm-generic/ /usr/include/asm \
 
     # Install CMake versions
-    && wget https://cmake.org/files/v2.8/cmake-2.8.12.2-Linux-i386.tar.gz   \
-    && tar -xvzf cmake-2.8.12.2-Linux-i386.tar.gz && mv cmake-2.8.12.2-Linux-i386 /usr/share/cmake-2.8.12 \
-
-    && wget https://github.com/Kitware/CMake/releases/download/v3.7.2/cmake-3.7.2-Linux-x86_64.tar.gz \
-    && tar -xvzf cmake-3.7.2-Linux-x86_64.tar.gz && mv cmake-3.7.2-Linux-x86_64 /usr/share/cmake-3.7.2  \
-
-    && wget https://github.com/Kitware/CMake/releases/download/v3.15.7/cmake-3.15.7-Linux-x86_64.tar.gz   \
-    && tar -xvzf cmake-3.15.7-Linux-x86_64.tar.gz && mv cmake-3.15.7-Linux-x86_64 /usr/share/cmake-3.15.7 \
-
-    && wget https://github.com/Kitware/CMake/releases/download/v3.19.2/cmake-3.19.2-Linux-x86_64.tar.gz   \
-    && tar -xvzf cmake-3.19.2-Linux-x86_64.tar.gz && mv cmake-3.19.2-Linux-x86_64 /usr/share/cmake-3.19.2 \
-
+    && wget https://github.com/Kitware/CMake/releases/download/v3.15.7/cmake-3.15.7-Linux-x86_64.tar.gz \
+    && tar -xvzf cmake-3.15.7-Linux-x86_64.tar.gz && mv cmake-3.15.7-Linux-x86_64 /usr/share/cmake-3.15.7  \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.16.9/cmake-3.16.9-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.16.9-Linux-x86_64.tar.gz && mv cmake-3.16.9-Linux-x86_64 /usr/share/cmake-3.16.9 \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.17.5/cmake-3.17.5-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.17.5-Linux-x86_64.tar.gz && mv cmake-3.17.5-Linux-x86_64 /usr/share/cmake-3.17.5 \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.19.7/cmake-3.19.7-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.19.7-Linux-x86_64.tar.gz && mv cmake-3.19.7-Linux-x86_64 /usr/share/cmake-3.19.7 \
     # Alternatives for CMake
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_2_8_12 10 \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_7_2 20 \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_15_7 30 \
-    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_19_2 40 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_15_7 10 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_9 20 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_17_5 30 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_19_7 40 \
     #
     # Install compilers: g++ and clang++
     && apt-get -qq install -y --no-install-recommends \
