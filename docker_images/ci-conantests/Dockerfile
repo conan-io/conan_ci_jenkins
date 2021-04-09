@@ -5,7 +5,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 ARG DEBIAN_FRONTEND=noninteractive
 ARG AGENT_VERSION=3.27
 
-ENV PY38 /home/conan/.pyenv/versions/3.8.1/bin/python
+ENV PY38 /home/conan/.pyenv/versions/3.8.6/bin/python
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
@@ -23,8 +23,8 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv init - \
     && pyenv virtualenv-init - \
     && pyenv update \
-    && pyenv install 3.8.1 \
-    && pyenv global 3.8.1 \
+    && pyenv install 3.8.6 \
+    && pyenv global 3.8.6 \
     && pip install "virtualenv<20.0.0" \
     && pip install tox \
     && pip install tox-venv \
