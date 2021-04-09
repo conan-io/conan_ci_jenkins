@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV PY27 2.7.18
 ENV PY36 3.6.12
 ENV PY38 3.8.6
-ENV PY39 3.9.0
+ENV PY39 3.9.2
 
 ENV CMAKE_3_15_7 /usr/share/cmake-3.15.7/bin/cmake
 ENV CMAKE_3_16_9 /usr/share/cmake-3.16.9/bin/cmake
