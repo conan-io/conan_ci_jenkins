@@ -7,17 +7,20 @@ winpylocation = {"py27": "C:\\Python27\\python.exe",
                  "py34": "C:\\Python34\\python.exe",
                  "py36": "C:\\Python36\\python.exe",
                  "py37": "C:\\Python37\\python.exe",
-                 "py38": "C:\\Python38-64\\python.exe"}
+                 "py38": "C:\\Python38-64\\python.exe",
+                 "py39": "C:\\Python39\\python.exe"}
 
 macpylocation = {"py27": "/Users/jenkins/.pyenv/versions/2.7.17/bin/python",
                  "py36": "/Users/jenkins/.pyenv/versions/3.6.5/bin/python",
                  "py37": "/Users/jenkins/.pyenv/versions/3.7.6/bin/python",
-                 "py38": "/Users/jenkins/.pyenv/versions/3.8.1/bin/python",}
+                 "py38": "/Users/jenkins/.pyenv/versions/3.8.1/bin/python",
+                 "py39": "/Users/jenkins/.pyenv/versions/3.9.2/bin/python"}
 
 linuxpylocation = {"py27": "/opt/pyenv/versions/2.7.16/bin/python",
                    "py36": "/opt/pyenv/versions/3.6.9/bin/python",
                    "py37": "/opt/pyenv/versions/3.7.5/bin/python",
-                   "py38": "/opt/pyenv/versions/3.8.1/bin/python"}
+                   "py38": "/opt/pyenv/versions/3.8.1/bin/python",
+                   "py39": "/opt/pyenv/versions/3.9.2/bin/python"}
 
 win_msbuilds_logs_folder = "D:\\J\\msbuild_logs"
 
