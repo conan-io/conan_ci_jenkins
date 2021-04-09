@@ -58,9 +58,9 @@ class TestLevelConfig {
 
     List<String> getEffectivePyvers(String nodeLabel){
 
-        def allPyvers = ["Macos": ['py38', 'py36', 'py27'],
-                         "Linux": ['py38', 'py37', 'py36', 'py27'],
-                         "Windows": ['py38', 'py36', 'py27']]
+        def allPyvers = ["Macos": ['py39', 'py38', 'py36', 'py27'],
+                         "Linux": ['py39', 'py38', 'py37', 'py36', 'py27'],
+                         "Windows": ['py39', 'py38', 'py36', 'py27']]
 
         if (script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             return allPyvers[nodeLabel]
