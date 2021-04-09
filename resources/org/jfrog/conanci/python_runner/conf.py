@@ -14,7 +14,7 @@ macpylocation = {"py27": "/Users/jenkins/.pyenv/versions/2.7.17/bin/python",
                  "py36": "/Users/jenkins/.pyenv/versions/3.6.5/bin/python",
                  "py37": "/Users/jenkins/.pyenv/versions/3.7.6/bin/python",
                  "py38": "/Users/jenkins/.pyenv/versions/3.8.1/bin/python",
-                 "py39": "/Users/jenkins/.pyenv/versions/3.9.2/bin/python"}
+                 "py39": "/Users/jenkins/.pyenv/versions/3.9.1/bin/python"}
 
 linuxpylocation = {"py27": "/opt/pyenv/versions/2.7.18/bin/python",
                    "py36": "/opt/pyenv/versions/3.6.12/bin/python",
