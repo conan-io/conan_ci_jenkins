@@ -10,7 +10,7 @@ RUN sudo apt-get update \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.6.12 \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.6 \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.9.2 \
-    && pyenv global 3.8.1 \
+    && pyenv global 3.8.6 \
     && python -m pip install --upgrade pip "virtualenv<20.0.0" PyGithub conan meson
     # Install CMake versions
 

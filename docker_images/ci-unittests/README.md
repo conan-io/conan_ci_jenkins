@@ -10,11 +10,11 @@ $> pyenv versions
   2.7.17
   3.5.9
   3.7.6
-  3.8.1
+  3.8.6
 ```
 
 And select one before launching the tests:
 
 ```
-pyenv global 3.8.1
+pyenv global 3.8.6
 ```
