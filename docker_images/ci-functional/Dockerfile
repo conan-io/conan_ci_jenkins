@@ -45,6 +45,12 @@ RUN apt-get -qq update \
     && tar -xvzf cmake-3.17.5-Linux-x86_64.tar.gz && mv cmake-3.17.5-Linux-x86_64 /usr/share/cmake-3.17.5 \
     && wget https://github.com/Kitware/CMake/releases/download/v3.19.7/cmake-3.19.7-Linux-x86_64.tar.gz   \
     && tar -xvzf cmake-3.19.7-Linux-x86_64.tar.gz && mv cmake-3.19.7-Linux-x86_64 /usr/share/cmake-3.19.7 \
+
+    #  Install Ninja
+    && wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz \
+    && tar -xvzf v1.10.2.tar.gz && cd ninja-1.10.2 && ./configure.py --bootstrap \
+    && cmake -Bbuild-cmake -H. && cmake --build build-cmake && cp ./build-cmake/ninja /usr/bin/
+
     # Alternatives for CMake
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_15_7 10 \
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_9 20 \
