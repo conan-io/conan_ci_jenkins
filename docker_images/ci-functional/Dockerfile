@@ -49,7 +49,7 @@ RUN apt-get -qq update \
     #  Install Ninja
     && wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz \
     && tar -xvzf v1.10.2.tar.gz && cd ninja-1.10.2 && ./configure.py --bootstrap \
-    && cmake -Bbuild-cmake -H. && cmake --build build-cmake && cp ./build-cmake/ninja /usr/bin/
+    && cmake -Bbuild-cmake -H. && cmake --build build-cmake && cp ./build-cmake/ninja /usr/bin/ \
 
     # Alternatives for CMake
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_15_7 10 \
