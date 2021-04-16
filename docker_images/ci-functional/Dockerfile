@@ -32,7 +32,7 @@ RUN apt-get -qq update \
        make build-essential libssl-dev zlib1g-dev libbz2-dev \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
        xz-utils tk-dev libffi-dev liblzma-dev python-openssl git wget sudo file \
-       autotools-dev automake linux-libc-dev subversion subversion-tools \
+       autotools-dev automake linux-libc-dev subversion subversion-tools ninja-build \
     # fix: asm/errno.h: No such file or directory
     && ln -s /usr/include/asm-generic/ /usr/include/asm \
 
@@ -83,13 +83,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv install $PY39 \
     && pyenv install $PY38 \
     && pyenv install $PY36 \
-    && pyenv install $PY27 \
-    && pyenv global $PY38 \
-
-    #  Install Ninja
-    && wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz \
-    && tar -xvzf v1.10.2.tar.gz && cd ninja-1.10.2 && ./configure.py --bootstrap \
-    && cmake -Bbuild-cmake -H. && cmake --build build-cmake && cp ./build-cmake/ninja /usr/bin/
+    && pyenv install $PY27
 
 COPY --chown=conan \
      select_cmake.sh \
