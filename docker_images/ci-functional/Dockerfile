@@ -32,7 +32,7 @@ RUN apt-get -qq update \
        make build-essential libssl-dev zlib1g-dev libbz2-dev \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
        xz-utils tk-dev libffi-dev liblzma-dev python-openssl git wget sudo file \
-       autotools-dev automake linux-libc-dev subversion subversion-tools \
+       autotools-dev automake linux-libc-dev subversion subversion-tools ninja-build \
     # fix: asm/errno.h: No such file or directory
     && ln -s /usr/include/asm-generic/ /usr/include/asm \
 
@@ -45,6 +45,7 @@ RUN apt-get -qq update \
     && tar -xvzf cmake-3.17.5-Linux-x86_64.tar.gz && mv cmake-3.17.5-Linux-x86_64 /usr/share/cmake-3.17.5 \
     && wget https://github.com/Kitware/CMake/releases/download/v3.19.7/cmake-3.19.7-Linux-x86_64.tar.gz   \
     && tar -xvzf cmake-3.19.7-Linux-x86_64.tar.gz && mv cmake-3.19.7-Linux-x86_64 /usr/share/cmake-3.19.7 \
+
     # Alternatives for CMake
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_15_7 10 \
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_9 20 \
