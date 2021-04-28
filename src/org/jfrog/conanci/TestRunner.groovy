@@ -190,7 +190,7 @@ class TestRunner {
                     if (slaveLabel == "Windows") {
                         try {
 
-                            script.withEnv(["CONAN_TEST_FOLDER=${workdir}", "_MSPDBSRV_ENDPOINT_=${BUILD_TAG}"]) {
+                            script.withEnv(["CONAN_TEST_FOLDER=${workdir}", "_MSPDBSRV_ENDPOINT_=${script.env.BUILD_TAG}"]) {
                                 script.bat(script: "set")
                                 script.bat(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} \"${workdir}\" ${numcores} ${flavor_cmd} ${eTags}")
                             }
