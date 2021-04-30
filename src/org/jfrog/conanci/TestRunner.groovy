@@ -39,7 +39,7 @@ class TestRunner {
         if(excludedTags){
             eTags = "-e " + excludedTags.join(' -e ')
         }
-        String ret = "${slaveLabel} - ${getFlavor(enabledRevisions)} - ${pyver} - '${eTags}'"
+        String ret = "${slaveLabel} - ${getFlavor(enabledRevisions)} - ${pyver} '${eTags}'"
         return ret
     }
 
