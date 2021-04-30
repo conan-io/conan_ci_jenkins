@@ -18,7 +18,6 @@ class TestRunner {
     void run(){
         cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
-        runRESTTests()
         script.echo("Branch: ${script.env.BRANCH_NAME}")
         if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
             runReleaseTests()
@@ -36,8 +35,11 @@ class TestRunner {
 
 
     private static String getStageLabel(String slaveLabel, boolean enabledRevisions, String pyver, List<String> excludedTags){
-        String eTags = "-e " + excludedTags.join(' -e ')
-        String ret = "${slaveLabel} - ${getFlavor(enabledRevisions)} - ${pyver} - '${eTags}'"
+        String eTags = ""
+        if(excludedTags){
+            eTags = "-e " + excludedTags.join(' -e ')
+        }
+        String ret = "${slaveLabel} - ${getFlavor(enabledRevisions)} - ${pyver} '${eTags}'"
         return ret
     }
 
@@ -50,26 +52,8 @@ class TestRunner {
         return revisionsEnabled ? " --flavor enabled_revisions" : ""
     }
 
-    void runRESTTests(){
-        List<String> excludedTags = []
-        List<String> includedTags = ["rest_api", "local_bottle"]
-        def slaveLabels = ["Windows", "Linux"]
-        Map<String, Closure> parallelRestBuilders = [:]
-        for (def slaveLabel in slaveLabels) {
-            List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
-            for (def pyver in pyVers) {
-                String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
-                parallelRestBuilders[stageLabel] = getTestClosure(slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
-            }
-        }
-        script.parallel(parallelRestBuilders)
-    }
-
-
     void runRegularBuildTests(){
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
-        excludedTags.add("rest_api")
-        excludedTags.add("local_bottle")
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
             Map<String, Closure> builders = [:]
@@ -114,8 +98,6 @@ class TestRunner {
 
     void runReleaseTests(){
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
-        excludedTags.add("rest_api")
-        excludedTags.add("local_bottle")
         for(revisionsEnabled in [true, false]) {
             Map<String, Closure> builders = [:]
             for (slaveLabel in ["Linux", "Macos", "Windows"]) {
