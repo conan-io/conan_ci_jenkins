@@ -19,13 +19,12 @@ class TestRunner {
         cancelPreviousCommits()
         testLevelConfig.init() // This will read the tags from the PR if this is a PR
         script.echo("Branch: ${script.env.BRANCH_NAME}")
-        runRegularBuildTests()
-        // if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
-        //     runReleaseTests()
-        // }
-        // else{
-        //     runRegularBuildTests()
-        // }
+        if(script.env.JOB_NAME == "ConanNightly" || script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
+            runReleaseTests()
+        }
+        else{
+            runRegularBuildTests()
+        }
     }
 
     void cancelPreviousCommits(){
