@@ -36,7 +36,10 @@ class TestRunner {
 
 
     private static String getStageLabel(String slaveLabel, boolean enabledRevisions, String pyver, List<String> excludedTags){
-        String eTags = "-e " + excludedTags.join(' -e ')
+        String eTags = ""
+        if(excludedTags){
+            eTags = "-e " + excludedTags.join(' -e ')
+        }
         String ret = "${slaveLabel} - ${getFlavor(enabledRevisions)} - ${pyver} - '${eTags}'"
         return ret
     }
