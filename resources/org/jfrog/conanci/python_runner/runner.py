@@ -25,12 +25,14 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
 
     tags_str = []
     if excluded_tags or include_tags:
-        for tag in excluded_tags:
-            tags_str.append("not {}".format(tag))
-        tags_str = '-m "%s"' % " and ".join(tags_str)
-        for tag in include_tags:
-            tags_str.append("{}".format(tag))
-        tags_str = '-m "%s"' % " or ".join(tags_str)
+        if excluded_tags:
+            for tag in excluded_tags:
+                tags_str.append("not {}".format(tag))
+            tags_str = '-m "%s"' % " and ".join(tags_str)
+        if include_tags:
+            for tag in include_tags:
+                tags_str.append("{}".format(tag))
+            tags_str = '-m "%s"' % " or ".join(tags_str)
     else:
         tags_str = ""
 
