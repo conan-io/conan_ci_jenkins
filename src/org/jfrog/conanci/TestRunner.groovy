@@ -96,8 +96,6 @@ class TestRunner {
 
     void runReleaseTests(){
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
-        excludedTags.add("rest_api")
-        excludedTags.add("local_bottle")
         for(revisionsEnabled in [true, false]) {
             Map<String, Closure> builders = [:]
             for (slaveLabel in ["Linux", "Macos", "Windows"]) {
