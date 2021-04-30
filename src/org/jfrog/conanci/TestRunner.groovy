@@ -50,26 +50,8 @@ class TestRunner {
         return revisionsEnabled ? " --flavor enabled_revisions" : ""
     }
 
-    void runRESTTests(){
-        List<String> excludedTags = []
-        List<String> includedTags = ["rest_api", "local_bottle"]
-        def slaveLabels = ["Windows", "Linux"]
-        Map<String, Closure> parallelRestBuilders = [:]
-        for (def slaveLabel in slaveLabels) {
-            List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
-            for (def pyver in pyVers) {
-                String stageLabel = "${slaveLabel} Https server tests - ${pyver}"
-                parallelRestBuilders[stageLabel] = getTestClosure(slaveLabel, stageLabel, false, pyver, excludedTags, includedTags)
-            }
-        }
-        script.parallel(parallelRestBuilders)
-    }
-
-
     void runRegularBuildTests(){
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
-        excludedTags.add("rest_api")
-        excludedTags.add("local_bottle")
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             // First (revisions or not) for linux
             Map<String, Closure> builders = [:]
