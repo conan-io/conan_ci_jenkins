@@ -68,6 +68,12 @@ RUN apt-get -qq update \
     && update-alternatives --install /usr/bin/clang clang $CLANG_7 20 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_9 10 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_7 20 \
+    #
+    # Install Ninja
+    && wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz \
+    && tar -xvzf v1.10.2.tar.gz && cd ninja-1.10.2 && ./configure.py --bootstrap \
+    && cmake -Bbuild-cmake -H. && cmake --build build-cmake && cp ./build-cmake/ninja /usr/bin/
+
     # Clean the image
     && rm -rf /var/lib/apt/lists && rm -rf /root/*.tar.gz
 
