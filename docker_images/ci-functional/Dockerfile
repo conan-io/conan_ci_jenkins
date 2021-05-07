@@ -88,8 +88,9 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
 # Install Ninja
 
 RUN wget https://github.com/ninja-build/ninja/archive/v1.10.2.tar.gz \
-    && tar -xvzf v1.10.2.tar.gz && cd ninja-1.10.2 && ./configure.py --bootstrap \
-    && cmake -Bbuild-cmake -H. && cmake --build build-cmake && cp ./build-cmake/ninja /usr/bin/
+    && tar -xvzf v1.10.2.tar.gz && cd ninja-1.10.2 \
+    && pyenv local 3.8.6 && python ./configure.py --bootstrap && pyenv local --unset \
+    && cmake -Bbuild-cmake -H. && cmake --build build-cmake && sudo cp ./build-cmake/ninja /usr/bin/
 
 COPY --chown=conan \
      select_cmake.sh \
