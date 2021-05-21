@@ -54,7 +54,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
               "{pip_installs} " \
               "python setup.py install && " \
               "conan --version && conan --help && " \
-              "pytest {module_path} {tags_str} " \
+              "pytest -rf {module_path} {tags_str} " \
               "{multiprocess} ".format(**{"module_path": module_path,
                                           "pyenv": pyenv,
                                           "tags_str": tags_str,
