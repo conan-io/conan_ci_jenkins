@@ -67,7 +67,13 @@ RUN apt-get -qq update \
     && update-alternatives --install /usr/bin/clang clang $CLANG_9 10 \
     && update-alternatives --install /usr/bin/clang clang $CLANG_7 20 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_9 10 \
-    && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_7 20 \
+    && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_7 20
+
+RUN apt install -y apt-transport-https curl gnupg \
+    && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
+    && mv bazel.gpg /etc/apt/trusted.gpg.d/ \
+    && echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
+    && apt update && apt install -y bazel \
     # Clean the image
     && rm -rf /var/lib/apt/lists && rm -rf /root/*.tar.gz
 
