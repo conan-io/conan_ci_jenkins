@@ -62,25 +62,23 @@ class TestLevelConfig {
                          "Linux": ['py39', 'py38', 'py37', 'py36', 'py27'],
                          "Windows": ['py39', 'py38', 'py36', 'py27']]
 
-        if (script.env.BRANCH_NAME =~ /(^release.*)|(^master)/) {
+        def developPyvers  = ["Macos": ['py27', 'py36'],
+                              "Linux": ['py27', 'py36'],
+                              "Windows": ['py27', 'py36']]
+
+        def reducedPyvers  = ["Macos": ['py36'],
+                              "Linux": ['py27', 'py36'],
+                              "Windows": ['py36']]
+
+        if (script.env.BRANCH_NAME =~ /(^release.*)|(^master)/ || script.env.JOB_NAME == "ConanNightly") {
             return allPyvers[nodeLabel]
         }
-
-        if (script.env.JOB_NAME == "ConanNightly"){
-            return allPyvers[nodeLabel]
+        else if (script.env.BRANCH_NAME == "develop") {
+            return developPyvers[nodeLabel]
         }
-
-        if (script.env.BRANCH_NAME =~ /(^PR-.*)/) {
-
-            def reducedPyvers  = ["Macos": ['py36'],
-                                  "Linux": ['py38', 'py36', 'py27'],
-                                  "Windows": ['py36']]
-
+        else {
             reducedPyvers[nodeLabel].addAll(this.pyVers[nodeLabel])
             return reducedPyvers[nodeLabel]
-        }
-        else{
-            return allPyvers[nodeLabel]
         }
     }
 
