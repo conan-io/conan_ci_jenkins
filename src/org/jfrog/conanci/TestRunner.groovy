@@ -57,7 +57,7 @@ class TestRunner {
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             Map<String, Closure> builders = [:]
             for (def slaveLabel in ["Linux", "Macos", "Windows"]) {
-                pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
+                List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
                     builders[stageLabel] = getTestClosure(slaveLabel, stageLabel, revisionsEnabled, pyver, excludedTags, [])
