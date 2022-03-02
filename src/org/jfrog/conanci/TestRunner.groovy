@@ -55,7 +55,7 @@ class TestRunner {
     void runRegularBuildTests(){
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
-            builders = [:]
+            Map<String, Closure> builders = [:]
             for (def slaveLabel in ["Linux", "Macos", "Windows"]) {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
