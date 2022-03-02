@@ -4,7 +4,7 @@ class TestRunner {
 
     private static final String winTmpBase = "D:/J/t/"
     private static final String restTmpBase = "/tmp/"
-    private static final String numCores = "3"
+    private static final String numCores = "4"
     private static final String testModule = "\"conans/test\""
     private script;
     private TestLevelConfig testLevelConfig
@@ -55,18 +55,8 @@ class TestRunner {
     void runRegularBuildTests(){
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
-            // First (revisions or not) for linux
-            Map<String, Closure> builders = [:]
-            List<String> pyVers = testLevelConfig.getEffectivePyvers("Linux")
-            for (def pyver in pyVers) {
-                String stageLabel = getStageLabel("Linux", revisionsEnabled, pyver, excludedTags)
-                builders[stageLabel] = getTestClosure("Linux", stageLabel, revisionsEnabled, pyver, excludedTags, [])
-            }
-            script.parallel(builders)
-
-            // Seconds (revisions or not) for Mac and windows
             builders = [:]
-            for (def slaveLabel in ["Macos", "Windows"]) {
+            for (def slaveLabel in ["Linux", "Macos", "Windows"]) {
                 pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
