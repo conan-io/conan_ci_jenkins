@@ -22,7 +22,7 @@ linuxpylocation = {"py27": "/opt/pyenv/versions/2.7.18/bin/python",
                    "py38": "/opt/pyenv/versions/3.8.6/bin/python",
                    "py39": "/opt/pyenv/versions/3.9.2/bin/python"}
 
-win_msbuilds_logs_folder = "R:\\J\\msbuild_logs"
+win_msbuilds_logs_folder = "C:\\J\\msbuild_logs"
 
 
 def get_environ(tmp_path):
