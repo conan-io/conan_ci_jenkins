@@ -39,7 +39,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     pyenv = pylocations[pyver]
     source_cmd = "." if platform.system() != "Windows" else ""
 
-    multiprocess = "-n=%s" % num_cores if num_cores > 1 and platform.system()!= "Windows" else ""
+    multiprocess = "-n=%s" % num_cores if num_cores > 1 else ""
 
     pip_installs = "pip install -r conans/requirements.txt && " \
                    "pip install -r conans/requirements_dev.txt && " \
