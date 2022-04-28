@@ -47,7 +47,7 @@ RUN apt-get -qq update \
     && wget https://github.com/Kitware/CMake/releases/download/v3.19.7/cmake-3.19.7-Linux-x86_64.tar.gz   \
     && tar -xvzf cmake-3.19.7-Linux-x86_64.tar.gz && mv cmake-3.19.7-Linux-x86_64 /usr/share/cmake-3.19.7 \
     && wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1-Linux-x86_64.tar.gz   \
-    && tar -xvzf cmake-3.23.1-Linux-x86_64.tar.gz && mv cmake-3.23.1-Linux-x86_64 /usr/share/cmake-3.23.1 \
+    && tar -xvzf cmake-3.23.1-Linux-x86_64.tar.gz && mv cmake-3.23.1-linux-x86_64 /usr/share/cmake-3.23.1 \
 
     # Alternatives for CMake
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_15_7 10 \
