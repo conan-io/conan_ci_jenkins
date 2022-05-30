@@ -4,7 +4,6 @@ LABEL maintainer="Luis Martinez de Bartolome <luism@jfrog.com>"
 
 RUN sudo apt-get update \
     && sudo apt-get -qq install -y --no-install-recommends golang pkg-config \
-    && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 2.7.18 \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.5.7 \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.6.12 \
     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.6 \
