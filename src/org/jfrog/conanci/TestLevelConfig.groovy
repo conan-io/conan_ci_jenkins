@@ -58,16 +58,16 @@ class TestLevelConfig {
 
     List<String> getEffectivePyvers(String nodeLabel){
 
-        def allPyvers = ["Macos": ['py39', 'py38', 'py36', 'py27'],
-                         "Linux": ['py39', 'py38', 'py37', 'py36', 'py27'],
-                         "Windows": ['py39', 'py38', 'py36', 'py27']]
+        def allPyvers = ["Macos": ['py39', 'py38', 'py36'],
+                         "Linux": ['py39', 'py38', 'py37', 'py36'],
+                         "Windows": ['py39', 'py38', 'py36']]
 
-        def developPyvers  = ["Macos": ['py27', 'py36'],
-                              "Linux": ['py27', 'py36'],
-                              "Windows": ['py27', 'py36']]
+        def developPyvers  = ["Macos": ['py36'],
+                              "Linux": ['py36'],
+                              "Windows": ['py36']]
 
         def reducedPyvers  = ["Macos": ['py36'],
-                              "Linux": ['py27', 'py36'],
+                              "Linux": ['py36'],
                               "Windows": ['py36']]
 
         if (script.env.BRANCH_NAME =~ /(^release.*)|(^master)/ || script.env.JOB_NAME == "ConanNightly") {

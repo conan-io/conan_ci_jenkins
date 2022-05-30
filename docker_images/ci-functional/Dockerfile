@@ -4,7 +4,6 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV PY27 2.7.18
 ENV PY36 3.6.12
 ENV PY38 3.8.6
 ENV PY39 3.9.2
@@ -89,8 +88,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv update \
     && pyenv install $PY39 \
     && pyenv install $PY38 \
-    && pyenv install $PY36 \
-    && pyenv install $PY27
+    && pyenv install $PY36
 
 COPY --chown=conan \
      select_cmake.sh \

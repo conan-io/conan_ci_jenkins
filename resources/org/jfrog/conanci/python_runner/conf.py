@@ -3,21 +3,17 @@ import os
 import platform
 from contextlib import contextmanager
 
-winpylocation = {"py27": "C:\\Python27\\python.exe",
-                 "py34": "C:\\Python34\\python.exe",
-                 "py36": "C:\\Python36\\python.exe",
+winpylocation = {"py36": "C:\\Python36\\python.exe",
                  "py37": "C:\\Python37\\python.exe",
                  "py38": "C:\\Python38-64\\python.exe",
                  "py39": "C:\\Python39\\python.exe"}
 
-macpylocation = {"py27": "/Users/jenkins/.pyenv/versions/2.7.18/bin/python",
-                 "py36": "/Users/jenkins/.pyenv/versions/3.6.13/bin/python",
+macpylocation = {"py36": "/Users/jenkins/.pyenv/versions/3.6.13/bin/python",
                  "py37": "/Users/jenkins/.pyenv/versions/3.7.6/bin/python",
                  "py38": "/Users/jenkins/.pyenv/versions/3.8.6/bin/python",
                  "py39": "/Users/jenkins/.pyenv/versions/3.9.0/bin/python"}
 
-linuxpylocation = {"py27": "/opt/pyenv/versions/2.7.18/bin/python",
-                   "py36": "/opt/pyenv/versions/3.6.12/bin/python",
+linuxpylocation = {"py36": "/opt/pyenv/versions/3.6.12/bin/python",
                    "py37": "/opt/pyenv/versions/3.7.5/bin/python",
                    "py38": "/opt/pyenv/versions/3.8.6/bin/python",
                    "py39": "/opt/pyenv/versions/3.9.2/bin/python"}

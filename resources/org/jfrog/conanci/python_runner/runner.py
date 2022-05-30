@@ -76,8 +76,6 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     env["CHANGE_AUTHOR_DISPLAY_NAME"] = ""
     if flavor == "enabled_revisions":
         env["TESTING_REVISIONS_ENABLED"] = "True"
-    if pyver.startswith("py2"):
-        env["USE_UNSUPPORTED_CONAN_WITH_PYTHON_2"] = "True"
     # Related with the error: LINK : fatal error LNK1318: Unexpected PDB error; RPC (23) '(0x000006BA)'
     # More info: http://blog.peter-b.co.uk/2017/02/stop-mspdbsrv-from-breaking-ci-build.html
     # Update, this doesn't solve the issue, other issues arise:
@@ -109,7 +107,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Launch tests in a venv')
     parser.add_argument('module', help='e.g.: conans.test')
-    parser.add_argument('pyver', help='e.g.: py27')
+    parser.add_argument('pyver', help='e.g.: py36')
     parser.add_argument('source_folder', help='Folder containing the conan source code')
     parser.add_argument('tmp_folder', help='Folder to create the venv inside')
     parser.add_argument('--include_tags', '-i', nargs=1, action=Extender,
