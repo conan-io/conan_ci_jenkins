@@ -69,6 +69,10 @@ RUN apt-get -qq update \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_9 10 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_7 20
 
+RUN wget https://dl.google.com/android/repository/android-ndk-r23c-linux.zip && \
+    unzip android-ndk-r23c-linux.zip -d /opt/ && \
+    rm android-ndk-r23c-linux.zip
+
 RUN apt install -y apt-transport-https curl gnupg \
     && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
     && mv bazel.gpg /etc/apt/trusted.gpg.d/ \
