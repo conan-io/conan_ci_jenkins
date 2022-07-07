@@ -32,7 +32,7 @@ RUN apt-get -qq update \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
        xz-utils tk-dev libffi-dev liblzma-dev python-openssl git wget sudo file \
        autotools-dev automake linux-libc-dev subversion subversion-tools ninja-build \
-       gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
+       gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf unzip \
     # fix: asm/errno.h: No such file or directory
     && ln -s /usr/include/asm-generic/ /usr/include/asm \
 
