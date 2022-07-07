@@ -32,7 +32,7 @@ RUN apt-get -qq update \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
        xz-utils tk-dev libffi-dev liblzma-dev python-openssl git wget sudo file \
        autotools-dev automake linux-libc-dev subversion subversion-tools ninja-build \
-       gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
+       gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf unzip \
     # fix: asm/errno.h: No such file or directory
     && ln -s /usr/include/asm-generic/ /usr/include/asm \
 
@@ -68,6 +68,10 @@ RUN apt-get -qq update \
     && update-alternatives --install /usr/bin/clang clang $CLANG_7 20 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_9 10 \
     && update-alternatives --install /usr/bin/clang++ clang++ $CLANGXX_7 20
+
+RUN wget https://dl.google.com/android/repository/android-ndk-r23c-linux.zip && \
+    unzip android-ndk-r23c-linux.zip -d /opt/ && \
+    rm android-ndk-r23c-linux.zip
 
 RUN apt install -y apt-transport-https curl gnupg \
     && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
