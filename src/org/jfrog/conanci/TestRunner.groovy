@@ -56,7 +56,7 @@ class TestRunner {
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             Map<String, Closure> builders = [:]
-            for (def slaveLabel in ["Linux", "Macos", "Windows"]) {
+            for (def slaveLabel in ["Linux", "Macos", "M1Macos", "Windows"]) {
                 List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
@@ -90,7 +90,7 @@ class TestRunner {
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in [true, false]) {
             Map<String, Closure> builders = [:]
-            for (slaveLabel in ["Linux", "Macos", "Windows"]) {
+            for (slaveLabel in ["Linux", "Macos", "M1Macos", "Windows"]) {
                 def pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
@@ -151,7 +151,7 @@ class TestRunner {
                             if (slaveLabel == "Windows") {
                                 script.bat(script: cmd)
                             }
-                            else if (slaveLabel == "Macos") {
+                            else if (slaveLabel == "Macos" || slaveLabel == "M1Macos") {
                                 script.sh(script: cmd)
                             }
                         }
@@ -169,7 +169,7 @@ class TestRunner {
                             script.bat(script: "rd /s /q \"${workdir}\"")
                             script.bat(script: "rd /s /q \"${sourcedir}\"")
                         }
-                    } else if (slaveLabel == "Macos") {
+                    } else if (slaveLabel == "Macos" || slaveLabel == "M1Macos") {
                         try {
                             script.withEnv(["PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin", "CONAN_TEST_FOLDER=${workdir}"]) {
                                 script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} ${flavor_cmd} ${eTags}")
