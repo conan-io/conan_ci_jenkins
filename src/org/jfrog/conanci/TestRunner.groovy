@@ -147,17 +147,12 @@ class TestRunner {
 
                         script.dir(base_source) { // Trick to create the parent
                             def escaped_ws = "${script.WORKSPACE}".toString().replace("\\", "/")
-                            
-                            String cmd = "python -c \"import shutil; shutil.copytree('${escaped_ws}', '${sourcedir}')\"".toString()
+                            String cmd = "python3 -c \"import shutil; shutil.copytree('${escaped_ws}', '${sourcedir}')\"".toString()
                             if (slaveLabel == "Windows") {
                                 script.bat(script: cmd)
                             }
-                            else if (slaveLabel == "Macos") {
+                            else if (slaveLabel == "Macos" || slaveLabel == "M1Macos") {
                                 script.sh(script: cmd)
-                            }
-                            else if (slaveLabel == "M1Macos") { 
-                                String cmd_m1 = cmd.replaceAll("python", "python3")
-                                script.sh(script: cmd_m1)
                             }
                         }
                     }
@@ -176,7 +171,7 @@ class TestRunner {
                         }
                     } else if (slaveLabel == "Macos" || slaveLabel == "M1Macos") {
                         try {
-                            script.withEnv(["PATH=/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin", "CONAN_TEST_FOLDER=${workdir}"]) {
+                            script.withEnv(["PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin", "CONAN_TEST_FOLDER=${workdir}"]) {
                                 script.sh(script: "python python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
