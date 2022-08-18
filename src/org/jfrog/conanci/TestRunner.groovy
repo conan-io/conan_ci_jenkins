@@ -60,7 +60,7 @@ class TestRunner {
             // FIXME: just a temporary fix to avoid running on PR's
             // remove after 1.51.3 release
             if (script.env.BRANCH_NAME == "develop") {
-                labels.append("M1Macos")
+                labels.add("M1Macos")
             }
             for (def slaveLabel in labels) {
                 List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
