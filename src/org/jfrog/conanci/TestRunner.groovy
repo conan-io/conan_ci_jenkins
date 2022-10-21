@@ -56,12 +56,7 @@ class TestRunner {
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             Map<String, Closure> builders = [:]
-            List<String> labels = ["Linux", "Macos", "Windows"]
-            // FIXME: just a temporary fix to avoid running on PR's
-            // remove after 1.51.3 release
-            if (script.env.BRANCH_NAME == "develop") {
-                labels.add("M1Macos")
-            }
+            List<String> labels = ["Linux", "Macos", "M1Macos", "Windows"]
             for (def slaveLabel in labels) {
                 List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
@@ -96,9 +91,7 @@ class TestRunner {
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in [true, false]) {
             Map<String, Closure> builders = [:]
-            // FIXME: removed M1Macos just a temporary fix to avoid running on PR's
-            // remove after 1.51.3 release
-            for (slaveLabel in ["Linux", "Macos", "Windows"]) {
+            for (slaveLabel in ["Linux", "Macos", "M1Macos", "Windows"]) {
                 def pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
