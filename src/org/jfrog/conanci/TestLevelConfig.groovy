@@ -45,7 +45,7 @@ class TestLevelConfig {
                         excludedTags.addAll(info["tags"])
                         revisions = info["revisions"]
 
-                        for (sl in ["Windows", "Macos", "M1Macos", "Linux"]) {
+                        for (sl in ["Windows", "M1Macos", "Linux"]) {
                             pyVers[sl] = []
                             pyVers[sl].addAll(info["pyvers"][sl])
                         }
@@ -58,18 +58,15 @@ class TestLevelConfig {
 
     List<String> getEffectivePyvers(String nodeLabel){
 
-        def allPyvers = ["Macos": ['py39', 'py38', 'py36'],
-                         "M1Macos": ['py39', 'py38', 'py36'],
+        def allPyvers = ["M1Macos": ['py39', 'py38', 'py36'],
                          "Linux": ['py39', 'py38', 'py37', 'py36'],
                          "Windows": ['py39', 'py38', 'py36']]
 
-        def developPyvers  = ["Macos": ['py36'],
-                              "M1Macos": ['py36'],
+        def developPyvers  = ["M1Macos": ['py36'],
                               "Linux": ['py36'],
                               "Windows": ['py36']]
 
-        def reducedPyvers  = ["Macos": ['py36'],
-                              "M1Macos": ['py36'],
+        def reducedPyvers  = ["M1Macos": ['py36'],
                               "Linux": ['py36'],
                               "Windows": ['py36']]
 

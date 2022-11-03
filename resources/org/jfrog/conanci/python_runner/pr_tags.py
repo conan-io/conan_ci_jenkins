@@ -56,16 +56,15 @@ if __name__ == "__main__":
     tags = clean_list(get_tag_from_pr(pr_number, TAG_TAGS))
     # Read pythons to include
     tmp = clean_list(get_tag_from_pr(pr_number, TAG_PYVERS))
-    pyvers = {"Windows": [], "Linux": [], "Macos": [], "M1Macos": []}
+    pyvers = {"Windows": [], "Linux": [], "M1Macos": []}
     for t in tmp:
         if "@" in t:
             the_os, pyver = t.split("@")
-            if the_os not in ["Macos", "M1Macos", "Linux", "Windows"]:
+            if the_os not in ["M1Macos", "Linux", "Windows"]:
                 print("Invalid os: %s" % the_os)
                 exit(-1)
             pyvers[the_os].append(pyver)
         else:
-            pyvers["Macos"].append(t)
             pyvers["M1Macos"].append(t)
             pyvers["Linux"].append(t)
             pyvers["Windows"].append(t)
