@@ -51,7 +51,7 @@ def run_tests(module_path, pyver, source_folder, tmp_folder, flavor, excluded_ta
     # FIXME: installing meson here. Linux images install their own tools, 
     #  this is something we probably want to fix in the future
     if not pyver.startswith("py2") and platform.system() != "Linux":
-        pip_installs += "pip install meson && "
+        pip_installs += "pip install meson --upgrade && "
 
     #  --nocapture
     command = "virtualenv --python \"{pyenv}\" \"{venv_dest}\" && " \
