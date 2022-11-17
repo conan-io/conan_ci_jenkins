@@ -56,7 +56,7 @@ COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
 
 RUN apt-get -qq update \
-    && apt-get -q install -y openjdk-8-jre-headless curl \
+    && apt-get -q install -y openjdk-11-jre-headless curl \
     && apt-get -q clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/*.bin \
