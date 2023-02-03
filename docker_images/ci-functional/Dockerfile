@@ -12,6 +12,7 @@ ENV CMAKE_3_15_7 /usr/share/cmake-3.15.7/bin/cmake
 ENV CMAKE_3_16_9 /usr/share/cmake-3.16.9/bin/cmake
 ENV CMAKE_3_17_5 /usr/share/cmake-3.17.5/bin/cmake
 ENV CMAKE_3_19_7 /usr/share/cmake-3.19.7/bin/cmake
+ENV CMAKE_3_23_5 /usr/share/cmake-3.23.5/bin/cmake
 
 ENV GCC_7 /usr/bin/gcc-7
 ENV GXX_7 /usr/bin/g++-7
@@ -45,12 +46,15 @@ RUN apt-get -qq update \
     && tar -xvzf cmake-3.17.5-Linux-x86_64.tar.gz && mv cmake-3.17.5-Linux-x86_64 /usr/share/cmake-3.17.5 \
     && wget https://github.com/Kitware/CMake/releases/download/v3.19.7/cmake-3.19.7-Linux-x86_64.tar.gz   \
     && tar -xvzf cmake-3.19.7-Linux-x86_64.tar.gz && mv cmake-3.19.7-Linux-x86_64 /usr/share/cmake-3.19.7 \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.23.5/cmake-3.23.5-Linux-x86_64.tar.gz   \
+    && tar -xvzf cmake-3.23.5-Linux-x86_64.tar.gz && mv cmake-3.23.5-linux-x86_64/ /usr/share/cmake-3.23.5 \
 
     # Alternatives for CMake
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_15_7 10 \
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_16_9 20 \
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_17_5 30 \
     && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_19_7 40 \
+    && update-alternatives --install /usr/bin/cmake cmake $CMAKE_3_23_5 50 \
     #
     # Install compilers: g++ and clang++
     && apt-get -qq install -y --no-install-recommends \
