@@ -17,5 +17,7 @@ RUN tar -xvzf Python-3.8.11.tgz
 RUN cd Python-3.8.11 && LD_LIBRARY_PATH="/openssl/lib/:/openssl/lib64/" ./configure --with-openssl=/openssl --enable-shared && make && make install
 ENV LD_LIBRARY_PATH="/openssl/lib/:/openssl/lib64/:/usr/local/lib/:${LD_LIBRARY_PATH}"
 RUN ls /usr/local/lib
-RUN python3 --version
+RUN update-alternatives --install /usr/local/bin/pip pip /usr/local/bin/pip3 1
+RUN update-alternatives --install /usr/local/bin/python python /usr/local/bin/python3 1
+RUN python --version
 WORKDIR /root
