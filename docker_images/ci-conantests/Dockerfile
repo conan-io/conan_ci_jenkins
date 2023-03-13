@@ -54,7 +54,7 @@ RUN pip install PyGithub \
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
 
-ARG AGENT_VERSION=4.2.1
+ARG AGENT_VERSION=4.9
 
 RUN apt-get -qq update \
     && apt-get -q install -y openjdk-11-jre-headless curl \
