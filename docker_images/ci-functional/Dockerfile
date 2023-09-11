@@ -98,7 +98,6 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv install $PY38 \
     && pyenv install $PY36
 
-
 COPY --chown=conan \
      select_cmake.sh \
      select_gcc.sh \
