@@ -4,7 +4,7 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV PY36 3.6.12
+ENV PY36 3.6.15
 ENV PY38 3.8.6
 ENV PY39 3.9.2
 
@@ -18,6 +18,8 @@ ENV GCC_7 /usr/bin/gcc-7
 ENV GXX_7 /usr/bin/g++-7
 ENV GCC_9 /usr/bin/gcc-9
 ENV GXX_9 /usr/bin/g++-9
+ENV GCC_11 /usr/bin/gcc-11
+ENV GXX_11 /usr/bin/g++-11
 
 ENV CLANG_7 /usr/bin/clang-7
 ENV CLANGXX_7 /usr/bin/clang++-7
@@ -36,6 +38,10 @@ RUN apt-get -qq update \
        gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf unzip \
     # fix: asm/errno.h: No such file or directory
     && ln -s /usr/include/asm-generic/ /usr/include/asm \
+    # Added repository for GCC 11
+    && apt-get -qq install -y software-properties-common \
+    && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
+    && apt-get -qq update \
 
     # Install CMake versions
     && wget https://github.com/Kitware/CMake/releases/download/v3.15.7/cmake-3.15.7-Linux-x86_64.tar.gz \
@@ -59,13 +65,15 @@ RUN apt-get -qq update \
     # Install compilers: g++ and clang++
     && apt-get -qq install -y --no-install-recommends \
        clang-9 clang-7 \
-       g++-9-multilib g++-7-multilib \
+       g++-11-multilib g++-9-multilib g++-7-multilib \
     #
     # Alternatives for GCC
     && update-alternatives --install /usr/bin/gcc gcc $GCC_9 10 \
     && update-alternatives --install /usr/bin/gcc gcc $GCC_7 20 \
     && update-alternatives --install /usr/bin/g++ g++ $GXX_9 10 \
     && update-alternatives --install /usr/bin/g++ g++ $GXX_7 20 \
+    && update-alternatives --install /usr/bin/gcc gcc $GCC_11 30 \
+    && update-alternatives --install /usr/bin/g++ g++ $GXX_11 30 \
     #
     # Alternatives for Clang
     && update-alternatives --install /usr/bin/clang clang $CLANG_9 10 \
