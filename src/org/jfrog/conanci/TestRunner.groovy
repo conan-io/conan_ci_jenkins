@@ -174,9 +174,11 @@ class TestRunner {
                     } else if (slaveLabel == "M2Macos") {
                         try {
                             def localDir = "/Users/jenkins"
+                            // Do not use the default python3 or it may inject variables as SDKROOT
+                            def python = "/Users/jenkins/.pyenv/versions/3.9.10/bin/python"
                             script.withEnv(["PATH+EXTRA=${localDir}/.pyenv/shims:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin",
                                             "CONAN_TEST_FOLDER=${workdir}"]) {
-                                script.sh(script: "python3 python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} ${flavor_cmd} ${eTags}")
+                                script.sh(script: "${python} python_runner/runner.py ${testModule} ${pyver} ${sourcedir} ${workdir} ${numcores} ${flavor_cmd} ${eTags}")
                             }
                         }
                         finally {
