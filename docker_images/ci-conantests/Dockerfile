@@ -46,7 +46,8 @@ RUN curl -kfsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && rm -rf /var/lib/apt/lists/* \
     && usermod -aG docker conan \
     && systemctl enable docker \
-    && pip install docker-compose
+    && pip install docker-compose \
+    && pip install docker==6.1.3
 
 RUN pip install PyGithub \
     && pip install meson
@@ -54,7 +55,7 @@ RUN pip install PyGithub \
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
 
-ARG AGENT_VERSION=4.9
+ARG AGENT_VERSION=3206.vb_15dcf73f6a_9
 
 RUN apt-get -qq update \
     && apt-get -q install -y openjdk-11-jre-headless curl \
