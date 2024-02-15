@@ -11,7 +11,7 @@ def buildDockerClosure(String image_name, boolean linter) {
         }
         if (env.BRANCH_NAME=="master") {
             stage("Push 'conanio/${image_name}'") {
-                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'conan_ci_jenkins_docker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh(script: "echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin;")
                     sh(script: "docker push conanio/${image_name}")
                 }
