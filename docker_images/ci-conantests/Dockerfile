@@ -46,8 +46,7 @@ RUN curl -kfsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && rm -rf /var/lib/apt/lists/* \
     && usermod -aG docker conan \
     && systemctl enable docker \
-    && pip install docker-compose \
-    && pip install docker==6.1.3
+    && pip install docker-compose && pip install docker==6.1.3
 
 RUN pip install PyGithub \
     && pip install meson
