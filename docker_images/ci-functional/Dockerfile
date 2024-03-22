@@ -86,13 +86,16 @@ RUN wget https://dl.google.com/android/repository/android-ndk-r23c-linux.zip && 
     unzip android-ndk-r23c-linux.zip -d /opt/ && \
     rm android-ndk-r23c-linux.zip
 
+ENV BAZEL_VERSION 6.5.0
+
 RUN apt install -y apt-transport-https curl gnupg \
-    && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
-    && mv bazel.gpg /etc/apt/trusted.gpg.d/ \
-    && echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
-    && apt update && apt install -y bazel libtool \
+    && curl -LO https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
+    && chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
+    && ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
+    && rm bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
+
     # Clean the image
-    && rm -rf /var/lib/apt/lists && rm -rf /root/*.tar.gz
+RUN rm -rf /var/lib/apt/lists && rm -rf /root/*.tar.gz
 
 RUN useradd -ms /bin/bash conan && echo "conan:conan" | chpasswd && adduser conan sudo
 RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
