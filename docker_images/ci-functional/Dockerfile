@@ -35,6 +35,7 @@ RUN apt-get -qq update \
        make build-essential libssl-dev zlib1g-dev libbz2-dev \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
        xz-utils tk-dev libffi-dev liblzma-dev python-openssl git wget sudo file \
+       libtool autoconf \
        autotools-dev automake linux-libc-dev subversion subversion-tools ninja-build \
        gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf unzip \
     # fix: asm/errno.h: No such file or directory
