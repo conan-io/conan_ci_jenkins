@@ -76,8 +76,7 @@ class TestRunner {
         script.node("Linux") {
             script.stage("Deploy snapshot to pypitesting"){
                 script.checkout script.scm
-                script.withCredentials([script.string(credentialsId: 'TWINE_USERNAME', variable: 'TWINE_USERNAME'),
-                                        script.string(credentialsId: 'TWINE_PASSWORD', variable: 'TWINE_PASSWORD')]) {
+                script.withCredentials([script.usernamePassword(credentialsId: 'PYPITEST_CONAN_CREDENTIALS', usernameVariable: 'TWINE_USERNAME', passwordVariable: 'TWINE_PASSWORD')]) {
                     script.sh(script: "pip install twine")
                     script.sh(script: "python .ci/bump_dev_version.py")
                     script.sh(script: "rm -rf dist/ && python setup.py sdist")
