@@ -95,6 +95,10 @@ RUN apt install -y apt-transport-https curl gnupg \
     && ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
     && rm bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
 
+RUN apt-add-repository ppa:fish-shell/release-3 \
+    && apt -qq update \
+    && apt -qq install -y fish --no-install-recommends --no-install-suggests
+
     # Clean the image
 RUN rm -rf /var/lib/apt/lists && rm -rf /root/*.tar.gz
 
