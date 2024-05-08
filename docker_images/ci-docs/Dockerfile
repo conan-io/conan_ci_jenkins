@@ -1,7 +1,7 @@
 FROM python:slim
 
 RUN apt-get update \
-    && apt-get install -y enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex graphviz
+    && apt-get install -y enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz
 
 COPY requirements.txt /tmp/
 
