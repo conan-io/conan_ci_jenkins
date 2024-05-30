@@ -87,14 +87,25 @@ RUN wget https://dl.google.com/android/repository/android-ndk-r23c-linux.zip && 
     unzip android-ndk-r23c-linux.zip -d /opt/ && \
     rm android-ndk-r23c-linux.zip
 
-ENV BAZEL_VERSION 6.5.0
+# Bazel installation
+ENV BAZEL_6_3_2 6.3.2
+ENV BAZEL_7_1_2 7.1.2
 
 RUN apt install -y apt-transport-https curl gnupg \
-    && curl -LO https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
-    && chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
-    && ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh \
-    && rm bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+    # Bazel 6.3.2
+    && curl -LO https://github.com/bazelbuild/bazel/releases/download/$BAZEL_6_3_2/bazel-$BAZEL_6_3_2-linux-x86_64 \
+    && chmod 755 bazel-$BAZEL_6_3_2-linux-x86_64 \
+    && mv bazel-$BAZEL_6_3_2-linux-x86_64 bazel \
+    && mdkir -p /usr/share/bazel-$BAZEL_6_3_2/bin \
+    && mv bazel /usr/share/bazel-$BAZEL_6_3_2/bin/ \
+    # Bazel 7.1.2
+    && curl -LO https://github.com/bazelbuild/bazel/releases/download/$BAZEL_7_1_2/bazel-$BAZEL_7_1_2-linux-x86_64 \
+    && chmod 755 bazel-$BAZEL_7_1_2-linux-x86_64 \
+    && mv bazel-$BAZEL_7_1_2-linux-x86_64 bazel \
+    && mdkir -p /usr/share/bazel-$BAZEL_7_1_2/bin \
+    && mv bazel /usr/share/bazel-$BAZEL_7_1_2/bin/
 
+# Fish installation
 RUN apt-add-repository ppa:fish-shell/release-3 \
     && apt -qq update \
     && apt -qq install -y fish --no-install-recommends --no-install-suggests
