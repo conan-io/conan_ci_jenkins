@@ -96,13 +96,13 @@ RUN apt install -y apt-transport-https curl gnupg \
     && curl -LO https://github.com/bazelbuild/bazel/releases/download/$BAZEL_6_3_2/bazel-$BAZEL_6_3_2-linux-x86_64 \
     && chmod 755 bazel-$BAZEL_6_3_2-linux-x86_64 \
     && mv bazel-$BAZEL_6_3_2-linux-x86_64 bazel \
-    && mdkir -p /usr/share/bazel-$BAZEL_6_3_2/bin \
+    && mkdir -p /usr/share/bazel-$BAZEL_6_3_2/bin \
     && mv bazel /usr/share/bazel-$BAZEL_6_3_2/bin/ \
     # Bazel 7.1.2
     && curl -LO https://github.com/bazelbuild/bazel/releases/download/$BAZEL_7_1_2/bazel-$BAZEL_7_1_2-linux-x86_64 \
     && chmod 755 bazel-$BAZEL_7_1_2-linux-x86_64 \
     && mv bazel-$BAZEL_7_1_2-linux-x86_64 bazel \
-    && mdkir -p /usr/share/bazel-$BAZEL_7_1_2/bin \
+    && mkdir -p /usr/share/bazel-$BAZEL_7_1_2/bin \
     && mv bazel /usr/share/bazel-$BAZEL_7_1_2/bin/
 
 # Fish installation
