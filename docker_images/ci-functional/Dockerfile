@@ -137,5 +137,25 @@ COPY --chown=conan \
 RUN chmod +x /home/conan/*.sh
 RUN sudo /home/conan/select_alternatives.sh gcc 9 clang 9 cmake 3.15.7
 
+USER root
+
+# install docker
+RUN apt-get -qq update \
+    && apt-get -qq install -y --no-install-recommends \
+    apt-transport-https \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+RUN curl -kfsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+    && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" \
+    && apt-get update \
+    && apt-get install -y docker-ce docker-ce-cli containerd.io \
+    && rm -rf /var/lib/apt/lists/* \
+    && usermod -aG docker conan \
+    && systemctl enable docker
+
+USER conan
+
 ENTRYPOINT ["/home/conan/select_alternatives.sh" ]
 CMD ["gcc", "9", "clang", "9", "cmake", "3.15.7"]
