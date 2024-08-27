@@ -7,6 +7,10 @@ RUN apt-get update \
     && apt-get install -y tzdata \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
+RUN apt-get install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update
+
 RUN apt-get install -y python3.9 python3.9-venv python3.9-dev python3-pip \
     enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended \
     texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz \
