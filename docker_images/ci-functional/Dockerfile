@@ -155,7 +155,29 @@ RUN curl -kfsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && usermod -aG docker conan \
     && systemctl enable docker
 
+COPY jenkins-slave /usr/local/bin/jenkins-slave
+COPY entrypoint.sh /opt/entrypoint.sh
+
+ARG AGENT_VERSION=3206.vb_15dcf73f6a_9
+
+RUN apt-get -qq update \
+    && apt-get -q install -y openjdk-11-jre-headless curl \
+    && apt-get -q clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -f /var/cache/apt/*.bin \
+    && pip3 install --no-cache virtualenv \
+    && curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${AGENT_VERSION}/remoting-${AGENT_VERSION}.jar \
+    && chmod 755 /usr/share/jenkins \
+    && chmod 644 /usr/share/jenkins/slave.jar \
+    && chmod +x /opt/entrypoint.sh /usr/local/bin/jenkins-slave
+
+ENTRYPOINT ["/opt/entrypoint.sh"]
+
 USER conan
 
-ENTRYPOINT ["/home/conan/select_alternatives.sh" ]
-CMD ["gcc", "9", "clang", "9", "cmake", "3.15.7"]
+RUN update-alternatives --set gcc $GCC_9 \
+    && update-alternatives --set g++ $GXX_9 \
+    && update-alternatives --set clang $CLANG_9 \
+    && update-alternatives --set clang++ $CLANGXX_9 \
+    && update-alternatives --set cmake $CMAKE_3_15_7
+
