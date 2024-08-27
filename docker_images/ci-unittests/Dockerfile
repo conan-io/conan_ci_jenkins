@@ -15,9 +15,9 @@ RUN apt-get -qq update \
        # pyenv requires
        make build-essential libssl-dev zlib1g-dev libbz2-dev \
        libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-       xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+       xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
+    && useradd -ms /bin/bash conan
 
-RUN useradd -ms /bin/bash conan
 USER conan
 WORKDIR /home/conan
 ENV PATH /home/conan/.pyenv/shims:/home/conan/.pyenv/bin:$PATH
@@ -31,9 +31,9 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv install $PY312 \
     && pyenv global $PY39
 
-# Remove not needed things
+# Remove not needed things except git
 USER root
-RUN apt-get -qq remove make build-essential git gcc \
+RUN apt-get -qq remove make build-essential gcc \
     && rm -rf /var/lib/apt/lists
     
 COPY jenkins-slave /usr/local/bin/jenkins-slave
