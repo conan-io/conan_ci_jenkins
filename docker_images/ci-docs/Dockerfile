@@ -1,8 +1,7 @@
-FROM python:slim
+FROM ubuntu:focal
 
 RUN apt-get update \
-    && apt-get install -y enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz
-
+    && apt-get install -y python3 python3-pip python3-venv enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
