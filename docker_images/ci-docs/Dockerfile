@@ -21,4 +21,3 @@ RUN apt-get -qq update \
     && chmod +x /opt/entrypoint.sh /usr/local/bin/jenkins-slave
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
-    
