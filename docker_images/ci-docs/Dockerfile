@@ -1,18 +1,20 @@
-FROM ubuntu:24.04
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
     && ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime \
-    && apt-get install -y python3 python3-pip python3-venv enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz \
     && apt-get install -y tzdata \
-    && dpkg-reconfigure --frontend noninteractive tzdata \
+    && dpkg-reconfigure --frontend noninteractive tzdata
+
+RUN apt-get install -y python3.9 python3.9-venv python3.9-dev python3-pip \
+    enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended \
+    texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv /opt/venv \
-    && . /opt/venv/bin/activate \
-    && pip install --no-cache-dir virtualenv
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1 \
+    && update-alternatives --install /usr/bin/pip3 pip3 /usr/bin/pip3.9 1
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
