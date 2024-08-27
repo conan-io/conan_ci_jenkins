@@ -1,4 +1,4 @@
-FROM ubuntu:jammy
+FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -10,6 +10,10 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+RUN python3 -m venv /opt/venv \
+    && . /opt/venv/bin/activate \
+    && pip install --no-cache-dir virtualenv
+
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
 
@@ -20,7 +24,6 @@ RUN apt-get -qq update \
     && apt-get -q clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/*.bin \
-    && pip3 install --no-cache virtualenv \
     && curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${AGENT_VERSION}/remoting-${AGENT_VERSION}.jar \
     && chmod 755 /usr/share/jenkins \
     && chmod 644 /usr/share/jenkins/slave.jar \
