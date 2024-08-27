@@ -174,10 +174,3 @@ RUN apt-get -qq update \
 ENTRYPOINT ["/opt/entrypoint.sh"]
 
 USER conan
-
-RUN update-alternatives --set gcc $GCC_9 \
-    && update-alternatives --set g++ $GXX_9 \
-    && update-alternatives --set clang $CLANG_9 \
-    && update-alternatives --set clang++ $CLANGXX_9 \
-    && update-alternatives --set cmake $CMAKE_3_15_7
-
