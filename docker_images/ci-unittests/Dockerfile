@@ -28,7 +28,8 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && pyenv install $PY39 \
     && pyenv install $PY38 \
     && pyenv install $PY36 \
-    && pyenv install $PY312
+    && pyenv install $PY312 \
+    && pyenv global $PY39
 
 # Remove not needed things
 USER root
