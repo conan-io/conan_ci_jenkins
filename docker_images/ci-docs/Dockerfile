@@ -1,7 +1,14 @@
 FROM ubuntu:focal
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update \
-    && apt-get install -y python3 python3-pip python3-venv enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz
+    && ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime \
+    && apt-get install -y python3 python3-pip python3-venv enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz \
+    && apt-get install -y tzdata \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
