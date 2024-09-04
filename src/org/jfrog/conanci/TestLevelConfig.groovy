@@ -46,12 +46,8 @@ class TestLevelConfig {
         if (script.env.BRANCH_NAME =~ /(^release.*)|(^master)/ || script.env.JOB_NAME == "ConanNightly") {
             return allPyvers[nodeLabel]
         }
-        else if (script.env.BRANCH_NAME == "develop") {
-            return developPyvers[nodeLabel]
-        }
         else {
-            reducedPyvers[nodeLabel].addAll(this.pyVers[nodeLabel])
-            return reducedPyvers[nodeLabel]
+            return developPyvers[nodeLabel]
         }
     }
 
