@@ -56,7 +56,7 @@ class TestRunner {
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in testLevelConfig.getEffectiveRevisionsConfigurations()) {
             Map<String, Closure> builders = [:]
-            List<String> labels = ["Linux", "M2Macos", "Windows"]
+            List<String> labels = ["LinuxFunctional", "M2Macos", "Windows"]
             for (def slaveLabel in labels) {
                 List<String> pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
@@ -73,7 +73,7 @@ class TestRunner {
 
     void publishTestPypi(){
         // Deploy snapshot to test pypi if branch develop
-        script.node("Linux") {
+        script.node("LinuxFunctional") {
             script.stage("Deploy snapshot to pypitesting"){
                 script.checkout script.scm
                 script.withCredentials([script.usernamePassword(credentialsId: 'PYPITEST_CONAN_CREDENTIALS', usernameVariable: 'TWINE_USERNAME', passwordVariable: 'TWINE_PASSWORD')]) {
@@ -90,7 +90,7 @@ class TestRunner {
         List<String> excludedTags = testLevelConfig.getEffectiveExcludedTags()
         for(revisionsEnabled in [true, false]) {
             Map<String, Closure> builders = [:]
-            for (slaveLabel in ["Linux", "M2Macos", "Windows"]) {
+            for (slaveLabel in ["LinuxFunctional", "M2Macos", "Windows"]) {
                 def pyVers = testLevelConfig.getEffectivePyvers(slaveLabel)
                 for (def pyver in pyVers) {
                     String stageLabel = getStageLabel(slaveLabel, revisionsEnabled, pyver, excludedTags)
@@ -185,15 +185,11 @@ class TestRunner {
                             script.sh(script: "rm -rf ${sourcedir}")
                         }
                     }
-                    else if (slaveLabel == "Linux"){
+                    else if (slaveLabel == "LinuxFunctional"){
                         try {
-                            script.sh("docker pull conanio/conantests")
-                            script.docker.image('conanio/conantests').inside() {
-                                script.sh(script: "mkdir -p ${sourcedir}")
-                                script.sh(script: "cp -R ./ ${sourcedir}")
-                                script.sh(script: "chown -R conan ${sourcedir}")
-                                script.sh(script: "su - conan -c \"python ${sourcedir}/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}\"")
-                            }
+                            script.sh(script: "mkdir -p ${sourcedir}")
+                            script.sh(script: "cp -R ./ ${sourcedir}")
+                            script.sh(script: "python ${sourcedir}/python_runner/runner.py ${testModule} ${pyver} ${sourcedir} /tmp ${numcores} ${flavor_cmd} ${eTags}")
                         }
                         finally {
                             script.sh(script: "rm -rf ${sourcedir}")
