@@ -23,7 +23,7 @@ RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
 
-ARG AGENT_VERSION=3206.vb_15dcf73f6a_9
+ARG AGENT_VERSION=3248.v65ecb_254c298
 
 RUN apt-get -qq update \
     && apt-get -q install -y openjdk-17-jre-headless curl \
