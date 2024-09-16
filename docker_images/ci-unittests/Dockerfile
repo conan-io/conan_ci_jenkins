@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV PY36 3.6.12
 ENV PY38 3.8.6
 ENV PY39 3.9.2
-ENV PY312 3.12.2
+ENV PY312 3.12.3
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
