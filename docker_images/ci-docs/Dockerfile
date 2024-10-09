@@ -12,7 +12,8 @@ RUN apt-get install -y software-properties-common \
     && apt-get update
 
 RUN apt-get install -y python3.12 python3.12-venv python3.12-dev \
-    python3.12-distutils \  
+    python3.12-distutils \
+    curl \ 
     enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended \
     texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz \
     && apt-get clean -y \
@@ -32,7 +33,7 @@ COPY entrypoint.sh /opt/entrypoint.sh
 ARG AGENT_VERSION=3248.v65ecb_254c298
 
 RUN apt-get -qq update \
-    && apt-get -q install -y openjdk-17-jre-headless curl \
+    && apt-get -q install -y openjdk-17-jre-headless \
     && apt-get -q clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/*.bin \
