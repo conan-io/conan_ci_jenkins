@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     libnss3 \
     libxss1 \
     libxtst6 \
+    fonts-noto-color-emoji \
     python3-pip \
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
