@@ -20,6 +20,15 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     asciinema \
     ffmpeg \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libx11-xcb1 \
+    libdbus-1-3 \
+    libasound2 \
+    libnss3 \
+    libxss1 \
+    libxtst6 \
     python3-pip \
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
