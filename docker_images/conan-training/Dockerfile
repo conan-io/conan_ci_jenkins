@@ -44,6 +44,8 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.27.1/cmake-3.27.1
     ln -s /usr/local/cmake/bin/cmake /usr/local/bin/cmake && \
     rm cmake-3.27.1-linux-x86_64.tar.gz
 
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
 RUN useradd -ms /bin/bash conan && echo "conan:conan" | chpasswd && adduser conan sudo && \
     echo "conan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
@@ -52,7 +54,6 @@ RUN mkdir -p /home/training && chown conan:conan /home/training
 USER conan
 WORKDIR /home/conan
 
-# Install Rust toolchain to install agg
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 ENV PATH="/home/conan/.cargo/bin:${PATH}"
