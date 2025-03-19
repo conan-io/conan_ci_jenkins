@@ -31,7 +31,8 @@ RUN apt-get update && apt-get install -y \
     libxtst6 \
     fonts-noto-color-emoji \
     python3-pip \
-    python3-venv && \
+    python3-venv \
+    file && \
     rm -rf /var/lib/apt/lists/*
 
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
@@ -69,6 +70,13 @@ ENV PATH="/home/conan/.cargo/bin:${PATH}"
 RUN cargo install --git https://github.com/asciinema/agg
 
 USER root
+
+RUN apt-get update && apt-get install -y \
+    gcc-12-arm-linux-gnueabihf \
+    g++-12-arm-linux-gnueabihf \
+    binutils-arm-linux-gnueabihf && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
 ARG AGENT_VERSION=3248.v65ecb_254c298
