@@ -30,7 +30,7 @@ RUN python3.12 -m pip install --upgrade pip setuptools
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY entrypoint.sh /opt/entrypoint.sh
 
-ARG AGENT_VERSION=3248.v65ecb_254c298
+ARG AGENT_VERSION=3309.v27b_9314fd1a_4
 
 RUN apt-get -qq update \
     && apt-get -q install -y openjdk-17-jre-headless \
