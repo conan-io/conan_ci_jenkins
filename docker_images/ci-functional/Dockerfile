@@ -162,7 +162,7 @@ COPY entrypoint.sh /opt/entrypoint.sh
 ARG AGENT_VERSION=3309.v27b_9314fd1a_4
 
 RUN apt-get -qq update \
-    && apt-get -q install -y openjdk-17-jre-headless curl \
+    && apt-get -q install -y openjdk-17-jdk openjdk-17-jre-headless curl \
     && apt-get -q clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /var/cache/apt/*.bin \
