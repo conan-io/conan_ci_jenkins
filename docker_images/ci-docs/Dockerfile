@@ -12,7 +12,6 @@ RUN apt-get install -y software-properties-common \
     && apt-get update
 
 RUN apt-get install -y python3.12 python3.12-venv python3.12-dev \
-    python3.12-distutils \
     curl \ 
     enchant-2 git make latexmk texlive-latex-base texlive-fonts-recommended \
     texlive-fonts-extra texlive-latex-extra texlive-xetex xindy graphviz \
