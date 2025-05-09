@@ -20,7 +20,7 @@ def buildDockerClosure(String image_name, boolean linter) {
     }
 }
 
-node("Linux") {
+node("dockerbuilder") {
     stage("Checkout the sources") {
         checkout scm
     }
