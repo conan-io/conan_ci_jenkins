@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-venv \
     tree \
-    file && \
+    file tesseract-ocr && \
     rm -rf /var/lib/apt/lists/*
 
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
